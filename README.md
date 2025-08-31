@@ -1,8 +1,12 @@
+# FourTwenty • The Launch
+
+>>Launch templates meant to provide rigid structure, discipline, and constraint foundation needed for good quality data analysis.
 
 
+The following provides an initial README.md seeding for every module birth.  Upon conception, this is step one when buildig the architecture of any decision model.
 
-
-# <Project Name> — Mini Dashboards
+---
+# <GLYPH> -> Project Name -> The ...
 
 ## Purpose
 - Problem:

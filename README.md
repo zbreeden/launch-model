@@ -1,6 +1,6 @@
 # FourTwenty • The Launch
 
->>
+>>Architectural Template / Machine Manifesto
 
 ## What’s inside
 - Purpose: <1–2 lines on the problem it solves>

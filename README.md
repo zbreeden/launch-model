@@ -1,18 +1,42 @@
-# FourTwenty • The Launch
 
->>Architectural Template / Machine Manifesto
 
-## What’s inside
-- Purpose: <1–2 lines on the problem it solves>
-- Artifacts: `/playground` (if applicable), `/powerbi`, `/artifacts` (screens/GIFs), `/gtm` (exports), `/ga4`
-- Telemetry: GA4 via GTM (no PII). See Tag Assistant & DebugView screenshots in `/artifacts`.
 
-## Quick start
-- Open `/playground/ux_playground.html` locally (`python3 -m http.server 5500`) to trigger events.
-- Attach GTM Preview and verify in GA4 DebugView.
 
-## Highlights
-- Event taxonomy: `<event_1>`, `<event_2>` with params `<param_a>`, `<param_b>`
-- BI views: <2–3 bullets on visuals/insights>
+# <Project Name> — Mini Dashboards
 
-License: MIT
+## Purpose
+- Problem:
+- Audience:
+- Outcomes (measurable): <e.g., lead time ↓20%, on-time % ≥85%>
+
+## Deliverables (MVP)
+1) Delivery Readiness dashboard
+2) Requirements→Release traceability
+3) Risk & Decision log
+
+## Data Contract (from seed.yaml)
+- Entities: initiatives, deliveryFlow, traceability, risks
+- IDs must be stable, strings.
+- Dates are ISO `YYYY-MM-DD`. Percentages are decimals (0–1).
+
+## UX Requirements
+- Tabs: Delivery | Traceability | Risks
+- Charts: Throughput (bar), Lead/Cycle (line)
+- Tables: traceability columns = epic, story, ac[], tests[], dataImpact, compliance, owner, status, releaseId
+- Accessibility: keyboard navigable, sensible aria labels.
+
+## Non-Goals (for now)
+- Live backend
+- Auth
+- Write APIs
+
+## Definition of Done
+- Renders from `seed.yaml` only (no hard-coded data)
+- Type-checked props
+- README updated with run steps
+- Lint clean
+
+## Run
+```bash
+npm install
+npm run dev

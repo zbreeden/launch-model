@@ -15,15 +15,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="Modular dashboard concept seed page with README render and analytics hooks." />
   <meta name="color-scheme" content="light dark" />
-  <title>🧩 Module — FourTwenty Analytics</title>
+  <title>🚀 The Launch — FourTwenty Analytics</title>
 
   <!-- ===================== GTM (recommended) ===================== -->
   <!-- Replace GTM-XXXXXXX with your container ID. If you plan to use GA4 via GTM, you don't need the GA4 snippet below. -->
   <script>
     // Set to false to temporarily disable GTM without removing the snippet
     const ENABLE_GTM = true;
-    const GTM_ID = 'GTM-WVC4SNLB'; // ← TODO: set your GTM container id
-    if (ENABLE_GTM && GTM_ID && !/GTM-WC4SNLB/.test(GTM_ID)) {
+    const GTM_ID = 'GTM-WCV4SNLB'; // ← TODO: set your GTM container id
+    if (ENABLE_GTM && GTM_ID && !/GTM-WCV4SNLB/.test(GTM_ID)) {
       (function(w,d,s,l,i){
         w[l]=w[l]||[]; w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
         var f=d.getElementsByTagName(s)[0], j=d.createElement(s), dl=l!='dataLayer'?'&l='+l:'';
@@ -82,7 +82,7 @@
 </head>
 <body>
   <!-- GTM (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WVC4SNLB" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WCV4SNLB" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <div class="wrap">
     <header>
@@ -102,16 +102,16 @@
         <h2>README.md</h2>
         <div class="meta">Rendered from <code>README.md</code> in this repo.</div>
         <div id="readme" class="readme" aria-live="polite">
-          <div class="md" id="readme-md">Loading README…</div>
+          <div class="md" id="readme-md" aria-busy="true"></div>
         </div>
       </section>
 
       <section class="card">
         <h2>Module Details</h2>
         <dl>
-          <dt class="sr-only">Name</dt><dd id="detail-name"></dd>
-          <dt class="sr-only">Orbit</dt><dd id="detail-orbit"></dd>
-          <dt class="sr-only">Glyph</dt><dd id="detail-glyph"></dd>
+          <dt class="sr-only">Name</dt><dd id="detail-name">The Launch</dd>
+          <dt class="sr-only">Orbit</dt><dd id="detail-orbit">Core System</dd>
+          <dt class="sr-only">Glyph</dt><dd id="detail-glyph">🚀</dd>
         </dl>
         <div class="links" id="quick-links">
           <!-- Filled by JS with repo links -->
@@ -122,9 +122,9 @@
     <footer>
       <div>Last updated: <span id="last-updated"></span></div>
       <div class="links">
-        <a href="https://github.com/zbreeden/launch-model/edit/main/README.md" id="link-edit-readme" data-analytics="edit_readme">Edit README</a>
-        <a href="https://github.com/zbreeden/launch-model/main" id="link-repo" data-analytics="open_repo">Open Repo</a>
-        <a href="https://github.com/zbreeden/launch-model/issues" id="link-issues" data-analytics="open_issues">Issues</a>
+        <a href="#" id="link-edit-readme" data-analytics="edit_readme">Edit README</a>
+        <a href="#" id="link-repo" data-analytics="open_repo">Open Repo</a>
+        <a href="#" id="link-issues" data-analytics="open_issues">Issues</a>
       </div>
     </footer>
   </div>
@@ -162,9 +162,11 @@
         const md = await res.text();
         const html = marked.parse(md, { mangle:false, headerIds:true });
         document.getElementById('readme-md').innerHTML = html;
+        document.getElementById('readme-md').setAttribute('aria-busy','false');
         track('readme_rendered', { ok: true });
       } catch (err) {
         document.getElementById('readme-md').innerHTML = '<p>Could not load <code>README.md</code>. Ensure it exists at the repo root.</p>';
+        document.getElementById('readme-md').setAttribute('aria-busy','false');
         track('readme_rendered', { ok: false, message: String(err) });
       }
     }

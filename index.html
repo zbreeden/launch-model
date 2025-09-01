@@ -23,7 +23,7 @@
     // Set to false to temporarily disable GTM without removing the snippet
     const ENABLE_GTM = true;
     const GTM_ID = 'GTM-WCV4SNLB'; // ← TODO: set your GTM container id
-    if (ENABLE_GTM && GTM_ID && !/GTM-WCV4SNLB/.test(GTM_ID)) {
+    if (ENABLE_GTM && GTM_ID && !/GTM-XXXXXXXX/.test(GTM_ID)) {
       (function(w,d,s,l,i){
         w[l]=w[l]||[]; w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
         var f=d.getElementsByTagName(s)[0], j=d.createElement(s), dl=l!='dataLayer'?'&l='+l:'';
@@ -211,7 +211,7 @@
       document.getElementById('last-updated').textContent = new Date(document.lastModified).toLocaleString();
     }
 
-    document.addEventListener('DOMContentLoaded', () => { initMeta(); loadReadme(); track('module_loaded'); const back = document.getElementById('back-home'); if (back) { back.addEventListener('click', () => signalNavClick('back_home','FourTwentyAnalytics','header')); const label = document.getElementById('back-label'); if (label) { label.textContent = `${MODULE.emoji} Back to FourTwenty Analytics`; } } }); loadReadme(); track('module_loaded'); });
+    document.addEventListener('DOMContentLoaded', () => { initMeta(); loadReadme(); track('module_loaded'); const back = document.getElementById('back-home'); if (back) { back.addEventListener('click', () => signalNavClick('back_home','FourTwentyAnalytics','header')); const label = document.getElementById('back-label'); if (label) { label.textContent = `${MODULE.emoji} Back to FourTwenty Analytics`; } } }); 
   </script>
 </body>
 </html>

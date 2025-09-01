@@ -15,15 +15,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="Modular dashboard concept seed page with README render and analytics hooks." />
   <meta name="color-scheme" content="light dark" />
-  <title>🚀 The Launch — FourTwenty Analytics</title>
+  <title>🧩 Module — FourTwenty Analytics</title>
 
   <!-- ===================== GTM (recommended) ===================== -->
   <!-- Replace GTM-XXXXXXX with your container ID. If you plan to use GA4 via GTM, you don't need the GA4 snippet below. -->
   <script>
     // Set to false to temporarily disable GTM without removing the snippet
     const ENABLE_GTM = true;
-    const GTM_ID = 'GTM-WVC4SNLB'; // ← TODO: set your GTM container id
-    if (ENABLE_GTM && GTM_ID && !/GTM-WVC4SNLB/.test(GTM_ID)) {
+    const GTM_ID = 'GTM-XXXXXXX'; // ← TODO: set your GTM container id
+    if (ENABLE_GTM && GTM_ID && !/GTM-XXXXXXX/.test(GTM_ID)) {
       (function(w,d,s,l,i){
         w[l]=w[l]||[]; w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
         var f=d.getElementsByTagName(s)[0], j=d.createElement(s), dl=l!='dataLayer'?'&l='+l:'';
@@ -76,19 +76,20 @@
     footer { margin: 22px 0 40px; color: var(--muted); font-size: 14px; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; }
     .links { display:flex; gap:12px; flex-wrap:wrap; }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
-  </style>
+      .back { display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px; font-size:14px; background: rgb(255 255 255 / 0.06); border:1px solid rgb(255 255 255 / 0.08); color: var(--text); }
+    .back:hover { text-decoration:none; filter: brightness(1.05); }
+</style>
 </head>
 <body>
   <!-- GTM (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WVC4SNLB" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <div class="wrap">
     <header>
+      <a class="back" href="https://zbreeden.github.io/FourTwentyAnalytics/" id="back-home" data-analytics="back_home" aria-label="Back to FourTwenty Analytics"><span id="back-label">Back to FourTwenty Analytics</span></a>
       <div class="title">
-        <div class="emoji" id="module-emoji" aria-hidden="true">🚀</div>
-
-        
-        <h1 id="module-name">The Launch</h1>
+        <div class="emoji" id="module-emoji" aria-hidden="true">🧩</div>
+        <h1 id="module-name">Module</h1>
       </div>
       <div class="badges">
         <span class="badge" id="module-version">v0.1</span>
@@ -121,9 +122,9 @@
     <footer>
       <div>Last updated: <span id="last-updated"></span></div>
       <div class="links">
-        <a href="https://github.com/zbreeden/launch-model/blob/main/README.md" id="link-edit-readme" data-analytics="edit_readme">Edit README</a>
-        <a href="https://github.com/zbreeden/launch-model/tree/main" id="link-repo" data-analytics="open_repo">Open Repo</a>
-        <a href="https://github.com/zbreeden/launch-model/issues" id="link-issues" data-analytics="open_issues">Issues</a>
+        <a href="#" id="link-edit-readme" data-analytics="edit_readme">Edit README</a>
+        <a href="#" id="link-repo" data-analytics="open_repo">Open Repo</a>
+        <a href="#" id="link-issues" data-analytics="open_issues">Issues</a>
       </div>
     </footer>
   </div>
@@ -132,12 +133,12 @@
     // ─────────────── Module config (edit these) ───────────────
     const MODULE = {
       name: 'The Launch',          // ← e.g., 'The Evaluator'
-      emoji: '🚀',             // ← e.g., '🧪'
-      orbit: 'Core System',      // ← e.g., 'signal-orbit'
+      emoji: '🚀',                  // ← module emoji
+      orbit: 'Core System',        // ← requested orbit
       version: '0.1.0',
-      status: 'Development',
-      repoUser: 'zbreeden',  // ← set once
-      repoName: 'launch-model'         // ← per module
+      status: 'Development',       // ← requested status
+      repoUser: 'zbreeden',        // ← requested user
+      repoName: 'launch-model'     // ← requested repo
     };
 
     // ─────────────── Analytics helpers ───────────────
@@ -208,7 +209,7 @@
       document.getElementById('last-updated').textContent = new Date(document.lastModified).toLocaleString();
     }
 
-    document.addEventListener('DOMContentLoaded', () => { initMeta(); loadReadme(); track('module_loaded'); });
+    document.addEventListener('DOMContentLoaded', () => { initMeta(); loadReadme(); track('module_loaded'); const back = document.getElementById('back-home'); if (back) { back.addEventListener('click', () => signalNavClick('back_home','FourTwentyAnalytics','header')); const label = document.getElementById('back-label'); if (label) { label.textContent = `${MODULE.emoji} Back to FourTwenty Analytics`; } } }); loadReadme(); track('module_loaded'); });
   </script>
 </body>
 </html>

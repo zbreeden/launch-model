@@ -2,216 +2,480 @@
 <html lang="en">
 <head>
   <!--
-    Generic index.html seed for FourTwenty Analytics modules
-    ─────────────────────────────────────────────────────────
-    How to use:
-      1) Replace the placeholders in the MODULE config below (name, emoji, repoUser, repoName).
-      2) Replace GA container and/or GA4 measurement IDs below.
-         • Prefer GTM to deploy GA4. If you also hard‑wire GA4 via gtag, avoid double page_view.
-      3) Push this file to the repo root (works on GitHub Pages).
-      4) Keep README.md in the repo; this page auto-renders it.
+    The Launch · Internal Systems Dashboard Face (index.html)
+    ————————————————————————————————————————————————————————
+    Purpose
+    • Give this repo a friendly “face” that also acts like an internal systems dashboard.
+    • Back button to the portfolio hub.
+    • Visualize repeatable launch KPIs (WIP, throughput, lead time, on‑time %, defects).
+    • Surface QA guardrails and seed files that make launches reproducible.
+
+    Notes
+    • Keep README.md in the repo root — this page can open/render it.
+    • Prefer GTM to deploy GA4; avoid double‑page_view if you also use gtag.
   -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Modular dashboard concept seed page with README render and analytics hooks." />
   <meta name="color-scheme" content="light dark" />
-  <title>🚀 The Launch — FourTwenty Analytics</title>
+  <title>🚀 The Launch — Systems Dashboard</title>
+  <meta name="description" content="Operational launch template • repeatable, QA‑focused seeds • internal systems dashboard." />
 
-  <!-- ===================== GTM (recommended) ===================== -->
-  <!-- Replace GTM-XXXXXXX with your container ID. If you plan to use GA4 via GTM, you don't need the GA4 snippet below. -->
+  <!-- Google Tag Manager (replace ID if needed) -->
   <script>
-    // Set to false to temporarily disable GTM without removing the snippet
-    const ENABLE_GTM = true;
-    const GTM_ID = 'GTM-WCV4SNLB'; // ← TODO: set your GTM container id
-    if (ENABLE_GTM && GTM_ID && !/GTM-XXXXXXXX/.test(GTM_ID)) {
-      (function(w,d,s,l,i){
-        w[l]=w[l]||[]; w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
-        var f=d.getElementsByTagName(s)[0], j=d.createElement(s), dl=l!='dataLayer'?'&l='+l:'';
-        j.async=true; j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl; f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer',GTM_ID);
-    }
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
+      var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+      j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-WVC4SNLB');
   </script>
-
-  <!-- ===================== GA4 (optional direct gtag) ===================== -->
-  <!-- If you deploy GA4 via GTM, you can keep this block commented to prevent duplicate page_view. -->
-  <!--
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);} // reuse dataLayer for coherence
-    gtag('js', new Date());
-    // If you also have a GTM GA4 tag sending page_view, set send_page_view:false here
-    gtag('config', 'G-XXXXXXXXXX', { send_page_view: true }); // ← TODO: set your GA4 ID
-  </script>
-  -->
-
-  <!-- Marked.js for README rendering -->
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <!-- End GTM -->
 
   <style>
-    :root { --bg: #0b0b10; --panel: #0f1220; --text: #e9eefb; --muted:#98a2b3; --brand:#5eead4; --accent:#a78bfa; }
-    @media (prefers-color-scheme: light) {
-      :root { --bg:#f7f7fb; --panel:#ffffff; --text:#101828; --muted:#667085; --brand:#0ea5e9; --accent:#7c3aed; }
+    :root{
+      --bg:        color-mix(in oklab, Canvas 92%, black 8%);
+      --card:      color-mix(in oklab, Canvas 96%, black 4%);
+      --ink:       color-mix(in oklab, CanvasText 95%, black 5%);
+      --muted:     color-mix(in oklab, var(--ink) 60%, transparent);
+      --ring:      color-mix(in oklab, #7c7cff 70%, #4ee 30%);
+      --ok:        #15b77e; /* green */
+      --warn:      #e7a43c; /* amber */
+      --bad:       #e05656; /* red */
+      --shadow:    0 8px 30px color-mix(in oklab, black 15%, transparent);
+      --radius:    18px;
+      --radius-xl: 26px;
     }
-    html, body { height: 100%; }
-    body { margin:0; font: 16px/1.6 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial; background:var(--bg); color:var(--text); }
-    .wrap { max-width: 980px; margin: 0 auto; padding: 24px; }
-    header { display:flex; justify-content:space-between; align-items:center; gap:16px; padding:20px; background:linear-gradient(135deg, var(--panel), transparent 60%); border-radius:16px; box-shadow: 0 8px 24px rgb(0 0 0 / 0.18); }
-    .title { display:flex; align-items:center; gap:12px; }
-    .title .emoji { font-size: 28px; }
-    .title h1 { margin:0; font-size: clamp(20px, 2.6vw, 28px); letter-spacing:0.2px; }
-    .meta { display:flex; gap:12px; flex-wrap:wrap; color:var(--muted); font-size: 14px; }
-    .badges { display:flex; gap:8px; flex-wrap:wrap; }
-    .badge { padding:4px 10px; border-radius:999px; background: rgb(255 255 255 / 0.06); color:var(--text); border:1px solid rgb(255 255 255 / 0.08); font-size:12px; }
-    a { color: var(--brand); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    main { margin-top: 22px; display:grid; gap:20px; grid-template-columns: 1fr; }
-    .card { background: var(--panel); border:1px solid rgb(255 255 255 / 0.06); border-radius: 16px; padding: 20px; box-shadow: 0 10px 28px rgb(0 0 0 / 0.12); }
-    .card h2 { margin: 0 0 12px; font-size: 18px; }
-    .readme { min-height: 200px; }
-    .readme .md h1 { font-size: 28px; margin-top: 0.4em; }
-    .readme .md h2 { font-size: 22px; border-bottom:1px solid rgb(127 127 127 / 0.25); padding-bottom: 4px; }
-    .readme .md pre { overflow:auto; padding:14px; border-radius:12px; background: #0a0f1a; color:#e6edf3; border: 1px solid rgb(255 255 255 / 0.06); }
-    .readme .md code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: 13px; }
-    footer { margin: 22px 0 40px; color: var(--muted); font-size: 14px; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; }
-    .links { display:flex; gap:12px; flex-wrap:wrap; }
-    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
-      .back { display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px; font-size:14px; background: rgb(255 255 255 / 0.06); border:1px solid rgb(255 255 255 / 0.08); color: var(--text); }
-    .back:hover { text-decoration:none; filter: brightness(1.05); }
-</style>
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font: 15px/1.45 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, Noto Sans, "Apple Color Emoji","Segoe UI Emoji";
+      background: var(--bg); color: var(--ink);
+    }
+    a{color: var(--ring); text-decoration: none}
+    a:hover{text-decoration: underline}
+
+    header{
+      position: sticky; top:0; z-index: 10;
+      backdrop-filter: blur(8px);
+      background: color-mix(in oklab, var(--bg) 70%, transparent);
+      border-bottom: 1px solid color-mix(in oklab, var(--ink) 12%, transparent);
+    }
+    .wrap{max-width: 1100px; margin: 0 auto; padding: 14px 18px}
+    .row{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+
+    .back{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 14px; border-radius: 999px; background: var(--card);
+      border:1px solid color-mix(in oklab, var(--ink) 10%, transparent);
+      box-shadow: var(--shadow);
+    }
+    .back .chev{width: 1.1rem; height: 1.1rem}
+
+    .brand{display:flex; align-items:center; gap:12px}
+    .logo{width:36px; height:36px; border-radius: 50%; display:grid; place-items:center; background: var(--card); box-shadow: var(--shadow)}
+    .logo span{font-size: 18px}
+    .title h1{font-size: 1.25rem; margin:0}
+    .title p{margin:0; color: var(--muted); font-size: .92rem}
+
+    main{padding: 24px 18px 60px}
+    .grid{max-width:1100px; margin:0 auto; display:grid; gap:18px; grid-template-columns: repeat(12, 1fr)}
+    @media (max-width: 900px){ .grid{grid-template-columns: repeat(6, 1fr)} }
+    @media (max-width: 640px){ .grid{grid-template-columns: repeat(2, 1fr)} }
+
+    .card{
+      grid-column: span 12;
+      background: var(--card); border:1px solid color-mix(in oklab, var(--ink) 10%, transparent);
+      border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 16px 16px 18px
+    }
+    .kpis{display:grid; grid-template-columns: repeat(12, 1fr); gap:12px}
+    .kpi{grid-column: span 3; background: color-mix(in oklab, var(--card) 96%, black 4%); border-radius: var(--radius); padding:14px; border:1px solid color-mix(in oklab, var(--ink) 10%, transparent)}
+    @media (max-width:900px){ .kpi{grid-column: span 6} }
+    @media (max-width:640px){ .kpi{grid-column: span 12} }
+
+    .kpi h3{margin:0 0 8px; font-size: .95rem; color: var(--muted)}
+    .kpi .big{font-weight:700; font-size: 1.8rem; letter-spacing: .5px}
+    .kpi .sub{font-size: .85rem; color: var(--muted)}
+    .badge{display:inline-block; padding:.18rem .5rem; border-radius: 999px; font-size:.78rem; border:1px solid transparent}
+    .ok{ background: color-mix(in oklab, var(--ok) 15%, transparent); border-color: color-mix(in oklab, var(--ok) 35%, transparent); color: color-mix(in oklab, var(--ok) 90%, white 10%) }
+    .warn{ background: color-mix(in oklab, var(--warn) 15%, transparent); border-color: color-mix(in oklab, var(--warn) 35%, transparent); color: color-mix(in oklab, var(--warn) 90%, white 10%) }
+    .bad{ background: color-mix(in oklab, var(--bad) 15%, transparent); border-color: color-mix(in oklab, var(--bad) 35%, transparent); color: color-mix(in oklab, var(--bad) 92%, white 8%) }
+
+    .section-title{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px}
+    .section-title h2{margin:0; font-size:1.05rem}
+
+    .controls{display:flex; gap:8px; flex-wrap:wrap}
+    .chip{padding:.35rem .6rem; border-radius: 999px; background: color-mix(in oklab, var(--ink) 8%, transparent); border:1px solid color-mix(in oklab, var(--ink) 12%, transparent); font-size:.82rem}
+    .chip input{width:5ch; background: transparent; border:none; outline:none; color: inherit; font: inherit; text-align:center}
+
+    .progress{height: 10px; border-radius: 999px; background: color-mix(in oklab, var(--ink) 10%, transparent); overflow:hidden}
+    .bar{height:100%; width: 0%; background: var(--ok)}
+
+    canvas{width:100%; max-height: 300px}
+
+    .qa-list{display:grid; gap:10px}
+    details{border:1px solid color-mix(in oklab, var(--ink) 12%, transparent); border-radius: var(--radius); background: color-mix(in oklab, var(--card) 90%, black 10%); padding:10px}
+    details[open]{box-shadow: var(--shadow)}
+    summary{cursor:pointer; list-style:none; display:flex; align-items:center; gap:8px; font-weight:600}
+    summary::-webkit-details-marker{display:none}
+    .dot{width:.6rem; height:.6rem; border-radius:999px; background: var(--warn)}
+
+    .seeds{display:grid; gap:8px; grid-template-columns: repeat(12, 1fr)}
+    .seed{grid-column: span 4; padding:10px 12px; border:1px dashed color-mix(in oklab, var(--ink) 18%, transparent); border-radius: 14px}
+    @media (max-width:900px){ .seed{grid-column: span 6} }
+    @media (max-width:640px){ .seed{grid-column: span 12} }
+    .seed code{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.82rem}
+
+    .readme pre{white-space: pre-wrap; background: color-mix(in oklab, var(--ink) 6%, transparent); padding:14px; border-radius: 12px; overflow:auto}
+
+    footer{max-width:1100px; margin: 30px auto 80px; padding: 0 18px; color: var(--muted)}
+  </style>
+
+  <!-- Chart.js for quick trends -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" integrity="sha384-1r9T3zYJ1YvGm2u0cS2u6nQ+7xH7bO1f9Q1u7m2X4Qx3l0s7b8tGynv6xjA2o1p9" crossorigin="anonymous"></script>
 </head>
 <body>
   <!-- GTM (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WCV4SNLB" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WVC4SNLB" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
-  <div class="wrap">
-    <header>
-      <a class="back" href="https://zbreeden.github.io/FourTwentyAnalytics/" id="back-home" data-analytics="back_home" aria-label="Back to FourTwenty Analytics"><span id="back-label">Back to FourTwenty Analytics</span></a>
-      <div class="title">
-        <div class="emoji" id="module-emoji" aria-hidden="true">🚀</div>
-        <h1 id="module-name">The Launch</h1>
+  <header>
+    <div class="wrap row">
+      <a class="back" href="https://zbreeden.github.io/FourTwentyAnalytics/" onclick="signal('back_to_hub_click')">
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        <span>Back to FourTwenty Analytics</span>
+      </a>
+      <div class="brand">
+        <div class="logo"><span>🚀</span></div>
+        <div class="title">
+          <h1>The Launch — Internal Systems Dashboard</h1>
+          <p>Repeatable, QA‑focused product launches built on seeds & guardrails.</p>
+        </div>
       </div>
-      <div class="badges">
-        <span class="badge" id="module-version">v0.1</span>
-        <span class="badge" id="module-status">status: seed</span>
-      </div>
-    </header>
+    </div>
+  </header>
 
-    <main>
-      <section class="card">
-        <h2>README.md</h2>
-        <div class="meta">Rendered from <code>README.md</code> in this repo.</div>
-        <div id="readme" class="readme" aria-live="polite">
-          <div class="md" id="readme-md" aria-busy="true"></div>
+  <main>
+    <section class="grid">
+      <!-- KPI Deck -->
+      <section class="card" style="grid-column: span 12">
+        <div class="section-title">
+          <h2>Operational KPIs</h2>
+          <div class="controls">
+            <span class="chip">WIP&nbsp;max: <input id="inpWip" type="number" min="1" step="1"/></span>
+            <span class="chip">On‑time&nbsp;target: <input id="inpOnTime" type="number" min="0" max="1" step="0.01"/></span>
+            <button class="chip" onclick="saveThresholds()" title="Persist in localStorage">Save thresholds</button>
+          </div>
+        </div>
+
+        <div class="kpis">
+          <div class="kpi" id="kpiWip">
+            <h3>Work in Progress</h3>
+            <div class="big" data-field="value">—</div>
+            <div class="sub"><span class="badge" data-field="badge">—</span></div>
+            <div class="progress" aria-hidden="true"><div class="bar" data-field="bar"></div></div>
+          </div>
+          <div class="kpi" id="kpiThroughput">
+            <h3>Throughput (units/sprint)</h3>
+            <div class="big" data-field="value">—</div>
+            <div class="sub">Avg <span data-field="avg">—</span> • Last <span data-field="last">—</span></div>
+            <div class="progress" aria-hidden="true"><div class="bar" data-field="bar"></div></div>
+          </div>
+          <div class="kpi" id="kpiLead">
+            <h3>Lead Time (days)</h3>
+            <div class="big" data-field="value">—</div>
+            <div class="sub">Trend last 4 sprints</div>
+            <div class="progress" aria-hidden="true"><div class="bar" data-field="bar"></div></div>
+          </div>
+          <div class="kpi" id="kpiOnTime">
+            <h3>On‑Time Delivery</h3>
+            <div class="big" data-field="value">—</div>
+            <div class="sub"><span class="badge" data-field="badge">—</span></div>
+            <div class="progress" aria-hidden="true"><div class="bar" data-field="bar"></div></div>
+          </div>
+          <div class="kpi" id="kpiDefects">
+            <h3>Defects (escape)</h3>
+            <div class="big" data-field="value">—</div>
+            <div class="sub">Lower is better</div>
+            <div class="progress" aria-hidden="true"><div class="bar" data-field="bar"></div></div>
+          </div>
+          <div class="kpi" id="kpiRepeat">
+            <h3>Repeatability Index</h3>
+            <div class="big" data-field="value">—</div>
+            <div class="sub">1 − σ/μ of throughput</div>
+            <div class="progress" aria-hidden="true"><div class="bar" data-field="bar"></div></div>
+          </div>
+          <div class="kpi" id="kpiHealth">
+            <h3>Process Health Score</h3>
+            <div class="big" data-field="value">—</div>
+            <div class="sub"><span class="badge" data-field="badge">—</span></div>
+            <div class="progress" aria-hidden="true"><div class="bar" data-field="bar"></div></div>
+          </div>
         </div>
       </section>
 
-      <section class="card">
-        <h2>Module Details</h2>
-        <dl>
-          <dt class="sr-only">Name</dt><dd id="detail-name">The Launch</dd>
-          <dt class="sr-only">Orbit</dt><dd id="detail-orbit">Core System</dd>
-          <dt class="sr-only">Glyph</dt><dd id="detail-glyph">🚀</dd>
-        </dl>
-        <div class="links" id="quick-links">
-          <!-- Filled by JS with repo links -->
-        </div>
+      <!-- Trends -->
+      <section class="card" style="grid-column: span 12">
+        <div class="section-title"><h2>Throughput & Lead Time (last sprints)</h2></div>
+        <canvas id="trendChart" aria-label="Throughput and Lead Time trends" role="img"></canvas>
       </section>
-    </main>
 
-    <footer>
-      <div>Last updated: <span id="last-updated"></span></div>
-      <div class="links">
-        <a href="https://github.com/zbreeden/launch-model/edit/main/README.md" id="link-edit-readme" data-analytics="edit_readme">Edit README</a>
-        <a href="https://github.com/zbreeden/launch-model/tree/main" id="link-repo" data-analytics="open_repo">Open Repo</a>
-        <a href="https://github.com/zbreeden/launch-model/issues" id="link-issues" data-analytics="open_issues">Issues</a>
-      </div>
-    </footer>
-  </div>
+      <!-- QA Guardrails -->
+      <section class="card" style="grid-column: span 7">
+        <div class="section-title"><h2>QA Guardrails (GIGO)</h2></div>
+        <div class="qa-list" id="qaList"></div>
+      </section>
+
+      <!-- Seeds Catalog -->
+      <section class="card" style="grid-column: span 5">
+        <div class="section-title"><h2>Seeds that make launches repeatable</h2></div>
+        <div class="seeds" id="seedList"></div>
+        <p style="margin-top:10px; color:var(--muted)">Keep these files versioned. Schematics drive everything; UIs are generated from specs.</p>
+      </section>
+
+      <!-- README (inline preview) -->
+      <section class="card readme" style="grid-column: span 12">
+        <div class="section-title">
+          <h2>README.md</h2>
+          <div class="controls">
+            <a class="chip" href="./README.md" target="_blank" rel="noopener" onclick="signal('open_readme_on_github')">Open raw</a>
+            <button class="chip" onclick="renderReadme()">Render inline</button>
+          </div>
+        </div>
+        <pre id="readmePre">(Click “Render inline” to load README.md here.)</pre>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    <p>© <span id="year"></span> FourTwenty Analytics • The Launch. Dashboard values below are demo data seeded from this repo’s README. Adjust thresholds above to simulate policy. Manufacturing‑style KPIs shown for repeatability.
+    </p>
+  </footer>
 
   <script>
-    // ─────────────── Module config (edit these) ───────────────
-    const MODULE = {
-      name: 'The Launch',          // ← e.g., 'The Evaluator'
-      emoji: '🚀',                  // ← module emoji
-      orbit: 'Core System',        // ← requested orbit
-      version: '0.1.0',
-      status: 'Development',       // ← requested status
-      repoUser: 'zbreeden',        // ← requested user
-      repoName: 'launch-model'     // ← requested repo
+    // ————— Data seed ————————————————————————————————————————————————
+    const seed = {
+      meta: { project: "GECU – The Bank", owner: "Zach Breeden", updated: "2025-08-30" },
+      thresholds: { wip_max: 5, on_time_target: 0.85 },
+      deliveryFlow: [
+        { sprint: "S-1", wip: 6, throughput: 5, leadTime: 9, cycleTime: 5, onTime: 0.60, defects: 2 },
+        { sprint: "S-2", wip: 5, throughput: 6, leadTime: 8, cycleTime: 4, onTime: 0.70, defects: 1 },
+        { sprint: "S-3", wip: 5, throughput: 7, leadTime: 7, cycleTime: 4, onTime: 0.82, defects: 1 },
+        { sprint: "S-4", wip: 4, throughput: 7, leadTime: 6, cycleTime: 3, onTime: 0.86, defects: 0 }
+      ],
+      qaRules: [
+        "Input contract first (schema is source of truth)",
+        "Source provenance header on every dataset",
+        "Deterministic validation (fail fast)",
+        "Funnel logic checks",
+        "Anomaly flags (warn, don’t fail)",
+        "Sampling + reality checks",
+        "Append‑only archive with MANIFEST",
+        "Small, loud CI (block on hard fails)",
+        "Human note box for known weirdness",
+        "Feedback loop (promote warn → error when warranted)"
+      ],
+      seeds: [
+        "seed.GLYPH.png",
+        "seed.README.md",
+        "seed.config.yaml",
+        "seed.schema.yaml",
+        "seed.funnel.spec.yaml",
+        "seed.rules.yaml",
+        "seed.validate.py",
+        "seed.apprentice.analyst.py"
+      ]
     };
 
-    // ─────────────── Analytics helpers ───────────────
-    window.dataLayer = window.dataLayer || [];
-    function track(eventName, params={}) {
-      const payload = { event: eventName, ...params, module_name: MODULE.name, module_orbit: MODULE.orbit };
-      dataLayer.push(payload);
-      // Optional: forward to gtag if present (direct GA4 setup)
-      if (typeof gtag === 'function') { gtag('event', eventName, payload); }
+    // ————— Utilities ————————————————————————————————————————————————
+    const $ = (sel, el=document) => el.querySelector(sel);
+    const $$ = (sel, el=document) => [...el.querySelectorAll(sel)];
+    const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+
+    function pct(n){ return (n*100).toFixed(0) + "%" }
+
+    function mean(arr){ return arr.reduce((a,b)=>a+b,0)/arr.length }
+    function stdev(arr){ const m = mean(arr); return Math.sqrt(mean(arr.map(x => (x-m)**2))) }
+
+    function statusClass(score){
+      if(score >= .9) return 'ok';
+      if(score >= .7) return 'warn';
+      return 'bad';
     }
 
-    function signalNavClick(action, label, context) {
-      track('nav_click', { action, label, context });
+    function setKpi(el, {value, badgeText, score, bar, extra}){
+      $('[data-field="value"]', el).textContent = value;
+      if(badgeText){ const b=$('[data-field="badge"]', el); b.textContent = badgeText; b.className = 'badge ' + statusClass(score ?? 0); }
+      $('[data-field="bar"]', el).style.width = clamp((bar ?? score ?? 0)*100, 0, 100) + '%';
+      if(extra){ Object.entries(extra).forEach(([k,v]) => { const t=$(`[data-field="${k}"]`, el); if(t) t.textContent = v; }); }
     }
 
-    // ─────────────── README rendering ───────────────
-    
-async function loadReadme() {
-      try {
-        const res = await fetch('README.md', { cache: 'no-store' });
-        if (!res.ok) throw new Error('README.md not found');
-        const md = await res.text();
-        const html = marked.parse(md, { mangle:false, headerIds:true });
-        document.getElementById('readme-md').innerHTML = html;
-        track('readme_rendered', { ok: true });
-      } catch (err) {
-        document.getElementById('readme-md').innerHTML = '<p>Could not load <code>README.md</code>. Ensure it exists at the repo root.</p>';
-        track('readme_rendered', { ok: false, message: String(err) });
+    function saveThresholds(){
+      const wip = Number($('#inpWip').value || seed.thresholds.wip_max);
+      const ot  = Number($('#inpOnTime').value || seed.thresholds.on_time_target);
+      const t   = { wip_max: Math.max(1, Math.round(wip)), on_time_target: clamp(ot, 0, 1) };
+      localStorage.setItem('launch.thresholds', JSON.stringify(t));
+      seed.thresholds = t; // mutate, then re-render
+      signal('thresholds_saved', t);
+      render();
+    }
+
+    function loadThresholds(){
+      const s = localStorage.getItem('launch.thresholds');
+      if(s){ try{ seed.thresholds = JSON.parse(s); }catch{ /* ignore */ } }
+      $('#inpWip').value    = seed.thresholds.wip_max;
+      $('#inpOnTime').value = seed.thresholds.on_time_target;
+    }
+
+    function compute(){
+      const rows = seed.deliveryFlow;
+      const last = rows[rows.length-1];
+      const thr  = seed.thresholds;
+
+      const tp   = rows.map(r=>r.throughput);
+      const tpMean = mean(tp);
+      const tpStd  = stdev(tp);
+      const repeatIdx = clamp(1 - (tpStd/(tpMean||1)), 0, 1);
+
+      // Normalize components into [0,1]
+      const onTimeNorm = clamp(last.onTime / (thr.on_time_target||1), 0, 1);
+      const wipNorm    = clamp(thr.wip_max / Math.max(last.wip, thr.wip_max), 0, 1);
+      const defectsNorm= clamp(1 - (last.defects/5), 0, 1); // assumes 5 defects = 0 score
+      const leadNorm   = clamp(1 - (last.leadTime/10), 0, 1); // 10 days benchmark
+
+      const health = clamp(0.30*onTimeNorm + 0.20*wipNorm + 0.15*defectsNorm + 0.15*leadNorm + 0.20*repeatIdx, 0, 1);
+
+      return { rows, last, thr, tpMean, tpStd, repeatIdx, onTimeNorm, wipNorm, defectsNorm, leadNorm, health };
+    }
+
+    function render(){
+      const c = compute();
+
+      setKpi($('#kpiWip'), {
+        value: c.last.wip,
+        badgeText: c.last.wip <= c.thr.wip_max ? `≤ max (${c.thr.wip_max})` : `over by ${c.last.wip - c.thr.wip_max}`,
+        score: c.wipNorm,
+        bar: c.wipNorm
+      });
+
+      setKpi($('#kpiThroughput'), {
+        value: c.tpMean.toFixed(1),
+        extra: { avg: c.tpMean.toFixed(1), last: String(c.last.throughput) },
+        score: clamp(c.tpMean/8, 0, 1), // 8 units/sprint as a soft target
+        bar: clamp(c.tpMean/8, 0, 1)
+      });
+
+      const leadScore = clamp(1 - (c.last.leadTime/10), 0, 1);
+      setKpi($('#kpiLead'), {
+        value: c.last.leadTime.toFixed(0),
+        score: leadScore,
+        bar: leadScore
+      });
+
+      setKpi($('#kpiOnTime'), {
+        value: pct(c.last.onTime),
+        badgeText: c.last.onTime >= c.thr.on_time_target ? 'On target' : 'Below target',
+        score: c.onTimeNorm,
+        bar: c.onTimeNorm
+      });
+
+      const defScore = clamp(1 - (c.last.defects/5), 0, 1);
+      setKpi($('#kpiDefects'), {
+        value: String(c.last.defects),
+        score: defScore,
+        bar: defScore
+      });
+
+      setKpi($('#kpiRepeat'), {
+        value: pct(c.repeatIdx),
+        score: c.repeatIdx,
+        bar: c.repeatIdx
+      });
+
+      setKpi($('#kpiHealth'), {
+        value: pct(c.health),
+        badgeText: c.health >= .9 ? 'Excellent' : c.health >= .7 ? 'Stable' : 'At Risk',
+        score: c.health,
+        bar: c.health
+      });
+
+      // QA list
+      const list = $('#qaList');
+      list.innerHTML = '';
+      seed.qaRules.forEach((txt, i) => {
+        const ok = (i === 2 && c.health >= .7) || (i === 3 && c.last.onTime >= c.thr.on_time_target); // tiny demo tie‑ins
+        const item = document.createElement('details');
+        item.innerHTML = `
+          <summary><span class="dot" style="background:${ ok ? 'var(--ok)' : 'var(--warn)'}"></span> ${String(i+1).padStart(2,'0')} • ${txt}</summary>
+          <div style="margin:10px 2px 2px; color:var(--muted)">
+            <div>Automation: <strong>${ ok ? 'Passing (demo)' : 'Pending checks'}</strong></div>
+            <div style="margin-top:6px" class="progress" aria-hidden="true"><div class="bar" style="width:${ ok ? '90%' : '50%'}"></div></div>
+          </div>`;
+        list.appendChild(item);
+      });
+
+      // Seeds list
+      const seeds = $('#seedList');
+      seeds.innerHTML = '';
+      seed.seeds.forEach(name => {
+        const el = document.createElement('div');
+        el.className = 'seed';
+        el.innerHTML = `<code>${name}</code><br/><span style="color:var(--muted)">Version‑control this file</span>`;
+        seeds.appendChild(el);
+      });
+
+      drawChart();
+    }
+
+    let chart;
+    function drawChart(){
+      const ctx = document.getElementById('trendChart');
+      const labels = seed.deliveryFlow.map(r=>r.sprint);
+      const through = seed.deliveryFlow.map(r=>r.throughput);
+      const lead = seed.deliveryFlow.map(r=>r.leadTime);
+
+      if(chart){ chart.destroy(); }
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            { label: 'Throughput', data: through, tension:.25, borderWidth:2, pointRadius:3 },
+            { label: 'Lead Time (days)', data: lead, tension:.25, borderWidth:2, pointRadius:3 }
+          ]
+        },
+        options: {
+          responsive:true,
+          interaction:{ mode:'index', intersect:false },
+          plugins:{ legend:{ position:'top' }, tooltip:{ enabled:true } },
+          scales:{ y:{ beginAtZero:false } }
+        }
+      });
+    }
+
+    async function renderReadme(){
+      try{
+        const res = await fetch('./README.md', { cache:'no-store' });
+        if(!res.ok) throw new Error('README.md not found');
+        const txt = await res.text();
+        // Minimal safe preview — no HTML injection, just show the text.
+        $('#readmePre').textContent = txt;
+        signal('readme_rendered_inline');
+      }catch(err){
+        $('#readmePre').textContent = 'Could not load README.md ('+err.message+'). You can still open it via the button above.';
       }
     }
 
-
-    // ─────────────── Page init ───────────────
-    function initMeta() {
-      const title = `${MODULE.emoji} ${MODULE.name} — FourTwenty Analytics`;
-      document.title = title;
-      document.getElementById('module-name').textContent = MODULE.name;
-      document.getElementById('module-emoji').textContent = MODULE.emoji;
-      document.getElementById('module-version').textContent = `v${MODULE.version}`;
-      document.getElementById('module-status').textContent = `status: ${MODULE.status}`;
-      document.getElementById('detail-name').textContent = `${MODULE.emoji} ${MODULE.name}`;
-      document.getElementById('detail-orbit').textContent = `orbit: ${MODULE.orbit}`;
-      document.getElementById('detail-glyph').textContent = `glyph: ${MODULE.emoji}`;
-
-      const host = location.hostname; // e.g., zbreeden.github.io
-      const pathParts = location.pathname.split('/').filter(Boolean); // ['', 'repo', ''] -> ['repo']
-      const inferredRepo = MODULE.repoName || (pathParts[0] || '');
-      const inferredUser = MODULE.repoUser || host.replace('.github.io','');
-
-      const repoURL   = `https://github.com/${inferredUser}/${inferredRepo}`;
-      const issuesURL = `${repoURL}/issues`;
-      const editReadmeURL = `${repoURL}/edit/main/README.md`;
-
-      const link = (href, text, id, ana) => {
-        const a = document.createElement('a');
-        a.href = href; a.textContent = text; a.id = id; a.dataset.analytics = ana;
-        a.addEventListener('click', () => signalNavClick(ana, href, 'footer')); return a;
-      };
-
-      const ql = document.getElementById('quick-links');
-      ql.innerHTML = '';
-      ql.append(link(repoURL, 'GitHub Repo', 'ql-repo', 'open_repo'));
-      ql.append(link(issuesURL, 'Issues', 'ql-issues', 'open_issues'));
-      ql.append(link(editReadmeURL, 'Edit README', 'ql-edit', 'edit_readme'));
-
-      document.getElementById('link-edit-readme').href = editReadmeURL;
-      document.getElementById('link-repo').href = repoURL;
-      document.getElementById('link-issues').href = issuesURL;
-
-      document.getElementById('last-updated').textContent = new Date(document.lastModified).toLocaleString();
+    // ————— Simple event signal to dataLayer ————————————————————————
+    function signal(event, params={}){
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event, ts: Date.now(), module:'launch_model', ...params });
     }
 
-    document.addEventListener('DOMContentLoaded', () => { initMeta(); loadReadme(); track('module_loaded'); const back = document.getElementById('back-home'); if (back) { back.addEventListener('click', () => signalNavClick('back_home','FourTwentyAnalytics','header')); const label = document.getElementById('back-label'); if (label) { label.textContent = `${MODULE.emoji} Back to FourTwenty Analytics`; } } }); 
+    // Init
+    (function init(){
+      loadThresholds();
+      render();
+      document.getElementById('year').textContent = new Date().getFullYear();
+      signal('dashboard_loaded', { project: seed.meta.project, updated: seed.meta.updated });
+    })();
   </script>
 </body>
 </html>

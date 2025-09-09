@@ -15,3 +15,4 @@ files:
   - schema/statuses.schema.yml
   - schema/modules.schema.yml
   - schema/registry.schema.yml
+  - signals/latest.json

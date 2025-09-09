@@ -88,4 +88,8 @@ repos:
     name: firm-model
     seeds: *default_seeds
 
+  - owner: zbreeden
+    name: anchor-model
+    seeds: *default_seeds
+
   

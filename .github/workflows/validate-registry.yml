@@ -1,0 +1,27 @@
+name: Validate registry.yml
+
+on:
+  push:
+    paths:
+      - "registry.yml"
+      - "schema/registry.schema.yml"
+      - "scripts/validate_registry.py"
+  pull_request:
+    paths:
+      - "registry.yml"
+      - "schema/registry.schema.yml"
+      - "scripts/validate_registry.py"
+  workflow_dispatch:
+
+jobs:
+  validate_registry:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install pyyaml jsonschema
+      - run: python scripts/validate_registry.py

@@ -7,22 +7,22 @@
 /<launch>-model/ | Semantics are important in a machine tagging system
 README.md | Scrolls written like journals start to narrate machine code thus making things practical, more stakeholder friendly
 index.html | Dashboards need a face
-seeds.glossary.yml |
-seeds.tags.yml |
-seeds.seedset.yml |
-seeds.emoji_palette.yml | Image can be just as powerful when tagging
-seeds.registry.yml |
-seeds.statuses.yml | 
-seeds.orbits.yml |
-seeds.modules.yml |
-signals.latest.json |
-seeds.rules.yml |
+seeds/glossary.yml | Canonical dictionary of stable keys → term/definition/examples/see_also; drives copy and cross-linking across repos
+seeds/tags.yml | Controlled taxonomy (key, label, description, kind, gloss_ref); keeps tagging consistent and machine-readable
+seeds/seedset.yml | Bootstrap defaults for new modules (owners, templates, default status/orbit, boilerplate links) consumed by scaffolding scripts
+seeds/emoji_palette.yml | Image can be just as powerful when tagging; central emoji maps (e.g., status_icons/orbit_icons) for UIs/READMEs
+seeds/registry.yml | Versioned schema registry: what seed files exist, their versions, and where their schema lives—lets validators know what to expect
+seeds/statuses.yml | Canonical lifecycle map with criteria + allowed_next; used by dashboards/validators to detect status drift (see current states) :contentReference[oaicite:2]{index=2}
+seeds/orbits.yml | Domain groupings (e.g., Delivery & Insight, Storytelling, Finance) with glyphs/emoji; modules attach here for navigation/segmentation
+seeds/modules.yml | Source of truth for constellation modules (repo, orbit, status, emoji, live_url); feeds `data/system/modules_index.json`
+signals/latest.json | Normalized “inbox” of recent broadcasts to surface on Launch (e.g., {origin, ts, type, title, body, url})
+seeds/rules.yml | Machine-readable GIGO guardrails (deterministic checks, severities, fix hints) that CI/validators execute to fail/warn appropriately :contentReference[oaicite:3]{index=3}
 
 Step 1 -> Move seeds/ from main repository...
 
 This launch scroll will provide a starter seedset, but the premise here is machine readable QA.  GIGO is to be avoided at all cost, and the cleanest way to do this is via technology.  We can define the bias through our guardrails.  It is key to let schematics drive everything, then let humans generate the UI and human readable documents from these specifications.
 
-##Garbage-In-Garbage-Out (GIGO) Guardrails --------> seeds/rules.yaml
+##Garbage-In-Garbage-Out (GIGO) Guardrails --------> seeds/rules.yml
 1) Input contract first
 - Keep schema.yaml the source of truth for types/ranges/enums.
 - Add required + pattern (IDs, dates), min/max (rates in 0–1).

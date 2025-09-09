@@ -93,3 +93,67 @@
   criteria: ["final_release_tag", "replacement_or_redirect_noted", "archive_or_readonly"]
   allowed_next: []
 
+- id: queued
+  label: "Queued"
+  emoji: "🗂️"
+  order: 5
+  meaning: "Proposed and parked; not yet resourced."
+  criteria: ["proposal_issue_open", "rough_tshirt_size"]
+  allowed_next: ["scoped", "seed"]
+
+- id: scoped
+  label: "Scoped"
+  emoji: "📝"
+  order: 15
+  meaning: "Problem framed; success metrics and approach agreed."
+  criteria: ["problem_statement", "success_metrics", "high_level_arch", "mvp_backlog"]
+  allowed_next: ["sprout", "developing", "paused"]
+
+- id: experiment
+  label: "Experiment"
+  emoji: "🧪"
+  order: 22
+  meaning: "Time-boxed spike to validate a hypothesis; code may be throwaway."
+  criteria: ["hypothesis_defined", "timebox<=14d", "measure_of_success"]
+  allowed_next: ["developing", "paused", "fired"]
+
+- id: pilot
+  label: "Pilot"
+  emoji: "🧭"
+  order: 35
+  meaning: "Limited rollout with real users; monitoring and feedback loops active."
+  criteria: ["pilot_users_identified", "feedback_cycle_running", "error_budget_defined"]
+  allowed_next: ["bloom", "paused", "cooled"]
+
+- id: audit
+  label: "Audit"
+  emoji: "🔍"
+  order: 45
+  meaning: "Pre-release hardening: QA, security, accessibility, performance."
+  criteria: ["qa_checklist_pass", "security_scan_clean", "a11y_scan>=AA", "perf_budget_met"]
+  allowed_next: ["bloom", "active", "paused"]
+
+- id: migrating
+  label: "Migrating"
+  emoji: "🚚"
+  order: 55
+  meaning: "Platform or data migration in progress (e.g., Snowflake)."
+  criteria: ["migration_plan", "shadow_or_dual_write", "rollback_checkpoint"]
+  allowed_next: ["active", "cooled", "paused"]
+
+- id: incident
+  label: "Incident"
+  emoji: "⚠️"
+  order: 66
+  meaning: "SEV open; stabilize and remediate before roadmap work."
+  criteria: ["sev_ticket_open", "owner_oncall", "comms_posted", "status_page_updated"]
+  allowed_next: ["active", "cooled", "overflowing"]
+
+- id: sunset_pending
+  label: "Sunset Pending"
+  emoji: "🌇"
+  order: 95
+  meaning: "EOL announced; migration path documented; countdown to retirement."
+  criteria: ["eol_announcement", "replacement_or_migration_path", "target_eol_date"]
+  allowed_next: ["fired", "paused"]
+

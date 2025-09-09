@@ -1,6 +1,8 @@
 # registry.yml
 version: 1
 
+$schema: "schema/registry.schema.yml"
+
 # ---- Default seed set (anchor) ---------------------------------------------
 default_seeds: &default_seeds
   glossary: { path: "seeds/glossary.yml",  schema: "schema/glossary.schema.yml",  required: false }
@@ -10,7 +12,7 @@ default_seeds: &default_seeds
   modules:  { path: "seeds/modules.yml",   schema: "schema/modules.schema.yml",   required: false }
   rules:    { path: "seeds/rules.yml",     schema: "schema/rules.schema.yml",     required: false }
   emoji_palette: { path: "seeds/emoji_palette.yml", schema: "schema/emoji_palette.schema.yml", required: false }
-  registry: { path: "seeds/registry.yml" , schema: "schema/registry.schema.yml" , required: true }
+  seedset: { path: "seeds/seedset.yml" schema: "schema/seedset.schema.yml", required: false }
 
 # ---- Repos in the constellation -------------------------------------------
 repos:

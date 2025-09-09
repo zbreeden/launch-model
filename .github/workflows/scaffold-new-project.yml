@@ -1,0 +1,83 @@
+name: Scaffold new project
+
+on:
+  workflow_dispatch:
+    inputs:
+      repo_name:
+        description: "New repository name (e.g., bank-model)"
+        required: true
+      visibility:
+        description: "public | private"
+        required: true
+        default: "public"
+      description:
+        description: "Short repo description"
+        required: false
+        default: "Scaffolded by The Launch"
+
+jobs:
+  scaffold:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      OWNER: zbreeden                 # ← your GitHub username/org
+      GH_TOKEN: ${{ secrets.GH_PAT }} # ← create a classic PAT with repo + pages:write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+
+      - name: Install deps
+        run: |
+          pip install pyyaml
+          sudo apt-get update -y && sudo apt-get install -y rsync
+
+      - name: Read seedset file list
+        id: list
+        run: |
+          python - <<'PY'
+          import yaml, sys
+          data = yaml.safe_load(open('seeds/seedset.yml'))
+          files = data.get('files', [])
+          open('filelist.txt','w').write("\n".join(files))
+          print(f"Found {len(files)} files to seed.")
+          PY
+          echo "OK"
+
+      - name: Create repo from scratch
+        run: |
+          VIS="${{ github.event.inputs.visibility }}"
+          gh repo create "$OWNER/${{ github.event.inputs.repo_name }}" \
+            --"$VIS" --description "${{ github.event.inputs.description }}" --confirm
+
+      - name: Clone new repo
+        run: |
+          git clone "https://$OWNER:${GH_TOKEN}@github.com/$OWNER/${{ github.event.inputs.repo_name }}.git" newrepo
+
+      - name: Copy seed files
+        run: |
+          while read p; do
+            mkdir -p "newrepo/$(dirname "$p")"
+            rsync -a "$p" "newrepo/$p"
+          done < filelist.txt
+
+      - name: First commit
+        run: |
+          cd newrepo
+          git config user.name  "launch-scaffolder"
+          git config user.email "actions@users.noreply.github.com"
+          git add .
+          git commit -m "chore: initial Launch seed"
+          git branch -M main
+          git push -u origin main
+
+      - name: (Optional) Enable GitHub Pages
+        if: ${{ github.event.inputs.visibility == 'public' }}
+        run: |
+          gh api --method POST "repos/$OWNER/${{ github.event.inputs.repo_name }}/pages" \
+            -H "Accept: application/vnd.github+json" \
+            --input - <<'JSON'
+          { "source": { "branch": "main", "path": "/" } }
+          JSON

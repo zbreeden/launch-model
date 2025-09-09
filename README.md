@@ -1,4 +1,4 @@
-# FourTwenty • The Launch <seed.README.md>
+# FourTwenty • The Launch
 
 >>Operational launch templates meant to provide rigid structure, discipline, and constraint foundation needed for good quality data analysis.
 

@@ -7,3 +7,11 @@ files:
   - seeds/statuses.yml
   - seeds/modules.yml
   - seeds/registry.yml
+  - seeds/seedset.yml
+  - schema/emoji_palette.schema.yml
+  - schema/orbits.schema.yml
+  - schema/tags.schema.yml
+  - schema/glossary.schema.yml
+  - schema/statuses.schema.yml
+  - schema/modules.schema.yml
+  - schema/registry.schema.yml

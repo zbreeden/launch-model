@@ -16,3 +16,5 @@ files:
   - schema/modules.schema.yml
   - schema/registry.schema.yml
   - signals/latest.json
+  - root/README.md
+  - root/index.html

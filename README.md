@@ -16,6 +16,7 @@ seeds.statuses.yml |
 seeds.orbits.yml |
 seeds.modules.yml |
 signals.latest.json |
+seeds.rules.yml |
 
 Step 1 -> Move seeds/ from main repository...
 

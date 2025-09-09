@@ -22,8 +22,7 @@ Step 1 -> Move seeds/ from main repository...
 
 This launch scroll will provide a starter seedset, but the premise here is machine readable QA.  GIGO is to be avoided at all cost, and the cleanest way to do this is via technology.  We can define the bias through our guardrails.  It is key to let schematics drive everything, then let humans generate the UI and human readable documents from these specifications.
 
-
-##Garbage-In-Garbage-Out (GIGO) Guardrails --------> qa/rules.yaml
+##Garbage-In-Garbage-Out (GIGO) Guardrails --------> seeds/rules.yaml
 1) Input contract first
 - Keep schema.yaml the source of truth for types/ranges/enums.
 - Add required + pattern (IDs, dates), min/max (rates in 0–1).

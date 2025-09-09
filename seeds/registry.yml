@@ -13,6 +13,7 @@ default_seeds: &default_seeds
   rules:    { path: "seeds/rules.yml",     schema: "schema/rules.schema.yml",     required: false }
   emoji_palette: { path: "seeds/emoji_palette.yml", schema: "schema/emoji_palette.schema.yml", required: false }
   seedset: { path: "seeds/seedset.yml" schema: "schema/seedset.schema.yml", required: false }
+  funnel_spec: { path: "schema/funnel_spec.yml", schema: "schema/funnel_spec.schema.yml", required: false }
 
 # ---- Repos in the constellation -------------------------------------------
 repos:

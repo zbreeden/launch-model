@@ -8,13 +8,15 @@ jobs:
     permissions:
       contents: write
       actions: read
+    env:
+      OWNER: zbreeden
+      REPOS: The-Launch,FourTwentyAnalytics,bank-model,protector-model,gambler-model,archive-model,signal-model,coach-model,player-model,story-model,visualizer-model,trainer-model
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "3.11" }
-      - name: Install deps
-        run: pip install requests
-      - name: Pull runs
+      - run: pip install requests
+      - name: Pull runs (multi-repo)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python scripts/pull_workflow_runs.py

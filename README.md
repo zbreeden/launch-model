@@ -5,72 +5,22 @@
 ##Master Scaffolding
            
 /<launch>-model/ | Semantics are important in a machine tagging system
-seed.GLYPH.png | Image can be just as powerful when tagging
-seed.README.md | Scrolls written like journals start to narrate machine code thus making things practical, more stakeholder friendly
-seed.config.yaml | Machine shaped specifications and quantum mechanics
-seed.schema.yaml | Machine shaped validation in JSON
-seed.funnel.spec.yaml | Machine shaped ETLs, SLAs, KPIs
-seed.rules.yaml | Machine shaped thresholds, tags, drift
-seed.validate.py | Machine written automated QA
-seed.apprentice.analyst.py | Developed 
+README.md | Scrolls written like journals start to narrate machine code thus making things practical, more stakeholder friendly
+index.html | Dashboards need a face
+seeds.glossary.yml |
+seeds.tags.yml |
+seeds.seedset.yml |
+seeds.emoji_palette.yml | Image can be just as powerful when tagging
+seeds.registry.yml |
+seeds.statuses.yml | 
+seeds.orbits.yml |
+seeds.modules.yml |
+signals.latest.json |
 
+Step 1 -> Move seeds/ from main repository...
 
+This launch scroll will provide a starter seedset, but the premise here is machine readable QA.  GIGO is to be avoided at all cost, and the cleanest way to do this is via technology.  We can define the bias through our guardrails.  It is key to let schematics drive everything, then let humans generate the UI and human readable documents from these specifications.
 
-
-
-
-
-Step 1 -> Seed a GLYPH.png
-Step 2 -> Seed a README.md
-
-##GLYPH <Launch>-model
-
-
-
-Step 3 -> Seed a config.yamml
-Step 4 -> Seed a schema.yaml
-
-
-
-Step 1 -> Seed a .yaml
-
-This launch scroll will provide a starter seed, but the premise here is machine readable QA.  GIGO is to be avoided at all cost, and the cleanest way to do this is via technology.  We can define the bias through our guardrails.  It is key to let schematics drive everything, then let humans generate the UI and human readable documents from these specifications.
-
--->>> seed.yaml <<<----
-
-version: 1.0.0
-meta: { project: "GECU – The Bank", owner: "Zach Breeden", updated: "2025-08-30" }
-ui: { thresholds: { wip_max: 5, on_time_target: 0.85 }, tabs: [delivery, traceability, risk] }
-
-initiatives:
-  - { id: ACH-01, name: "ACH Dispute Experience", type: Compliance, reg: "Reg E" }
-  - { id: LN-01,  name: "Loan App Funnel",       type: Lending,    reg: "GLBA" }
-
-deliveryFlow:
-  - { sprint: S-1, wip: 6, throughput: 5, leadTime: 9, cycleTime: 5, onTime: 0.60, defects: 2 }
-  - { sprint: S-2, wip: 5, throughput: 6, leadTime: 8, cycleTime: 4, onTime: 0.70, defects: 1 }
-  - { sprint: S-3, wip: 5, throughput: 7, leadTime: 7, cycleTime: 4, onTime: 0.82, defects: 1 }
-  - { sprint: S-4, wip: 4, throughput: 7, leadTime: 6, cycleTime: 3, onTime: 0.86, defects: 0 }
-
-traceability:
-  - epic: "ACH Dispute Status"
-    story: "As a member, I can see dispute status in app"
-    ac:
-      - "Given a dispute exists, When I open it, Then I see current step"
-      - "Status reflects backend state within 15 minutes"
-    tests: ["API returns state", "UI shows step chips"]
-    dataImpact: "fact_dispute_status; join on member_id"
-    compliance: "Reg E"
-    owner: "ZB"
-    status: "Released S-3"
-    releaseId: "2025.08.15"
-
-risks:
-  - { kind: Risk, item: "PII exposure in exports", impact: High, likelihood: Medium,
-      mitigation: "Mask fields; RBAC; audit log", owner: ZB, date: "2025-08-28", next: "2025-09-02" }
-
-##Broadcast 08302025
-Can we set GIGO standards so that the machine cannot drift from day one??
 
 ##Garbage-In-Garbage-Out (GIGO) Guardrails --------> qa/rules.yaml
 1) Input contract first

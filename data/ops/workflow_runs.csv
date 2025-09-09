@@ -1,1 +1,1 @@
-
+repo,workflow_name,run_id,attempt,event,actor,branch,commit_sha,started_at,completed_at,duration_sec,status,conclusion,queue_time_sec,triggered_by,url,logs_url,sla_sec,sla_met,notes

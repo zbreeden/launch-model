@@ -17,8 +17,17 @@ seeds/orbits.yml | Domain groupings (e.g., Delivery & Insight, Storytelling, Fin
 seeds/modules.yml | Source of truth for constellation modules (repo, orbit, status, emoji, live_url); feeds `data/system/modules_index.json`
 signals/latest.json | Normalized “inbox” of recent broadcasts to surface on Launch (e.g., {origin, ts, type, title, body, url})
 seeds/rules.yml | Machine-readable GIGO guardrails (deterministic checks, severities, fix hints) that CI/validators execute to fail/warn appropriately :contentReference[oaicite:3]{index=3}
-schema/*.schema.yml |
-schema/funnel_spec.yml |
+schema/registry.schema.yml | Validates registry.yml (repos + seed→schema map; enforces path/patterns, required flags, no stray keys)
+schema/glossary.schema.yml | Validates seeds/glossary.yml (array of {key, term, definition, examples?, see_also?} with snake_case keys)
+schema/tags.schema.yml     | Validates seeds/tags.yml (key, label, description, kind enum, gloss_ref, deprecated; consistent taxonomy)
+schema/statuses.schema.yml | Validates seeds/statuses.yml (id, label, emoji, order, meaning, criteria[], allowed_next[] lifecycle)
+schema/orbits.schema.yml   | Validates seeds/orbits.yml (id, label, emoji, order[, description] for domain groupings)
+schema/modules.schema.yml  | Validates seeds/modules.yml (key, repo/owner or full_name, orbit, status[, emoji, live_url, tags[], timestamps])
+schema/rules.schema.yml    | Validates seeds/rules.yml (version + rules[] of {id, severity, description, checks[], enabled?, tags?})
+schema/emoji_palette.schema.yml | Validates seeds/emoji_palette.yml (icon maps like status_icons/orbit_icons; snake_case keys → emoji)
+schema/seedset.schema.yml  | Validates seeds/seedset.yml (files[] to fan-out; optional dirs[], copy[from→to], variables{} for token replace)
+schema/funnel_spec.schema.yml | Validates schema/funnel_spec.yml (version/defaults + funnels[]; each funnel has steps[] with SLAs/transitions)
+schema/funnel_spec.yml     | **Spec, not a schema** — defines funnels (e.g., module lifecycle, workflow_run): legal step transitions, SLAs, and step flags (terminal, steady_state, urgent) used by validators to check drift/SLA breaches.
 
 Step 1 -> Move seeds/ from main repository...
 

@@ -6,3 +6,4 @@ files:
   - seeds/glossary.yml
   - seeds/statuses.yml
   - seeds/modules.yml
+  - seeds/registry.yml

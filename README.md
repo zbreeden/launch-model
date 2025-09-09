@@ -17,6 +17,8 @@ seeds/orbits.yml | Domain groupings (e.g., Delivery & Insight, Storytelling, Fin
 seeds/modules.yml | Source of truth for constellation modules (repo, orbit, status, emoji, live_url); feeds `data/system/modules_index.json`
 signals/latest.json | Normalized “inbox” of recent broadcasts to surface on Launch (e.g., {origin, ts, type, title, body, url})
 seeds/rules.yml | Machine-readable GIGO guardrails (deterministic checks, severities, fix hints) that CI/validators execute to fail/warn appropriately :contentReference[oaicite:3]{index=3}
+schema/*.schema.yml |
+schema/funnel_spec.yml |
 
 Step 1 -> Move seeds/ from main repository...
 
@@ -24,7 +26,7 @@ This launch scroll will provide a starter seedset, but the premise here is machi
 
 ##Garbage-In-Garbage-Out (GIGO) Guardrails --------> seeds/rules.yml
 1) Input contract first
-- Keep schema.yaml the source of truth for types/ranges/enums.
+- Keep schema/*.schema.yml the source of truth for types/ranges/enums (see seeds/registry.yml).
 - Add required + pattern (IDs, dates), min/max (rates in 0–1).
 
 2) Source provenance
@@ -38,7 +40,7 @@ This launch scroll will provide a starter seedset, but the premise here is machi
 - Time sanity (no future dates, no “release before sprint”).
 
 4) Funnel logic checks
-- Steps must exist in funnel_spec.yaml.
+- Steps must exist in schema/funnel_spec.yaml.
 - Transitions must be legal (no started → submitted skips).
 - SLA timers present when required (e.g., status visible ≤15m).
 

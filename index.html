@@ -1,618 +1,89 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <!--
-    The Launch · Internal Systems Dashboard Face (index.html)
-    ————————————————————————————————————————————————————————
-    Purpose
-    • Give this repo a friendly “face” that also acts like an internal systems dashboard.
-    • Back button to the portfolio hub.
-    • Visualize repeatable launch KPIs (WIP, throughput, lead time, on‑time %, defects).
-    • Surface QA guardrails and seed files that make launches reproducible.
-
-    Notes
-    • Keep README.md in the repo root — this page can open/render it.
-    • Prefer GTM to deploy GA4; avoid double‑page_view if you also use gtag.
-  -->
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="color-scheme" content="light dark" />
-  <title>🚀 The Launch — Systems Dashboard</title>
-  <meta name="description" content="Operational launch template • repeatable, QA‑focused seeds • internal systems dashboard." />
-
-  <!-- Google Tag Manager (replace ID if needed) -->
-  <script>
-    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
-      var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
-      j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-WVC4SNLB');
-  </script>
-  <!-- End GTM -->
-
-  <style>
-    :root{
-      --bg:        color-mix(in oklab, Canvas 92%, black 8%);
-      --card:      color-mix(in oklab, Canvas 96%, black 4%);
-      --ink:       color-mix(in oklab, CanvasText 95%, black 5%);
-      --muted:     color-mix(in oklab, var(--ink) 60%, transparent);
-      --ring:      color-mix(in oklab, #7c7cff 70%, #4ee 30%);
-      --ok:        #15b77e; /* green */
-      --warn:      #e7a43c; /* amber */
-      --bad:       #e05656; /* red */
-      --shadow:    0 8px 30px color-mix(in oklab, black 15%, transparent);
-      --radius:    18px;
-      --radius-xl: 26px;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; font: 15px/1.45 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, Noto Sans, "Apple Color Emoji","Segoe UI Emoji";
-      background: var(--bg); color: var(--ink);
-    }
-    a{color: var(--ring); text-decoration: none}
-    a:hover{text-decoration: underline}
-
-    header{
-      position: sticky; top:0; z-index: 10;
-      backdrop-filter: blur(8px);
-      background: color-mix(in oklab, var(--bg) 70%, transparent);
-      border-bottom: 1px solid color-mix(in oklab, var(--ink) 12%, transparent);
-    }
-    .wrap{max-width: 1100px; margin: 0 auto; padding: 14px 18px}
-    .row{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
-
-    .back{
-      display:inline-flex; align-items:center; gap:10px;
-      padding:10px 14px; border-radius: 999px; background: var(--card);
-      border:1px solid color-mix(in oklab, var(--ink) 10%, transparent);
-      box-shadow: var(--shadow);
-    }
-    .back .chev{width: 1.1rem; height: 1.1rem}
-
-    .brand{display:flex; align-items:center; gap:12px}
-    .logo{width:36px; height:36px; border-radius: 50%; display:grid; place-items:center; background: var(--card); box-shadow: var(--shadow)}
-    .logo span{font-size: 18px}
-    .title h1{font-size: 1.25rem; margin:0}
-    .title p{margin:0; color: var(--muted); font-size: .92rem}
-
-    main{padding: 24px 18px 60px}
-    .grid{max-width:1100px; margin:0 auto; display:grid; gap:18px; grid-template-columns: repeat(12, 1fr)}
-    @media (max-width: 900px){ .grid{grid-template-columns: repeat(6, 1fr)} }
-    @media (max-width: 640px){ .grid{grid-template-columns: repeat(2, 1fr)} }
-
-    .card{
-      grid-column: span 12;
-      background: var(--card); border:1px solid color-mix(in oklab, var(--ink) 10%, transparent);
-      border-radius: var(--radius); box-shadow: var(--shadow);
-      padding: 16px 16px 18px
-    }
-    .kpis{display:grid; grid-template-columns: repeat(12, 1fr); gap:12px}
-    .kpi{grid-column: span 3; background: color-mix(in oklab, var(--card) 96%, black 4%); border-radius: var(--radius); padding:14px; border:1px solid color-mix(in oklab, var(--ink) 10%, transparent)}
-    @media (max-width:900px){ .kpi{grid-column: span 6} }
-    @media (max-width:640px){ .kpi{grid-column: span 12} }
-
-    .kpi h3{margin:0 0 8px; font-size: .95rem; color: var(--muted)}
-    .kpi .big{font-weight:700; font-size: 1.8rem; letter-spacing: .5px}
-    .kpi .sub{font-size: .85rem; color: var(--muted)}
-    .badge{display:inline-block; padding:.18rem .5rem; border-radius: 999px; font-size:.78rem; border:1px solid transparent}
-    .ok{ background: color-mix(in oklab, var(--ok) 15%, transparent); border-color: color-mix(in oklab, var(--ok) 35%, transparent); color: color-mix(in oklab, var(--ok) 90%, white 10%) }
-    .warn{ background: color-mix(in oklab, var(--warn) 15%, transparent); border-color: color-mix(in oklab, var(--warn) 35%, transparent); color: color-mix(in oklab, var(--warn) 90%, white 10%) }
-    .bad{ background: color-mix(in oklab, var(--bad) 15%, transparent); border-color: color-mix(in oklab, var(--bad) 35%, transparent); color: color-mix(in oklab, var(--bad) 92%, white 8%) }
-
-    .section-title{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px}
-    .section-title h2{margin:0; font-size:1.05rem}
-
-    .controls{display:flex; gap:8px; flex-wrap:wrap}
-    .chip{padding:.35rem .6rem; border-radius: 999px; background: color-mix(in oklab, var(--ink) 8%, transparent); border:1px solid color-mix(in oklab, var(--ink) 12%, transparent); font-size:.82rem}
-    .chip input{width:5ch; background: transparent; border:none; outline:none; color: inherit; font: inherit; text-align:center}
-
-    .progress{height: 10px; border-radius: 999px; background: color-mix(in oklab, var(--ink) 10%, transparent); overflow:hidden}
-    .bar{height:100%; width: 0%; background: var(--ok)}
-
-    canvas{width:100%; max-height: 300px}
-
-    .qa-list{display:grid; gap:10px}
-    details{border:1px solid color-mix(in oklab, var(--ink) 12%, transparent); border-radius: var(--radius); background: color-mix(in oklab, var(--card) 90%, black 10%); padding:10px}
-    details[open]{box-shadow: var(--shadow)}
-    summary{cursor:pointer; list-style:none; display:flex; align-items:center; gap:8px; font-weight:600}
-    summary::-webkit-details-marker{display:none}
-    .dot{width:.6rem; height:.6rem; border-radius:999px; background: var(--warn)}
-
-    .seeds{display:grid; gap:8px; grid-template-columns: repeat(12, 1fr)}
-    .seed{grid-column: span 4; padding:10px 12px; border:1px dashed color-mix(in oklab, var(--ink) 18%, transparent); border-radius: 14px}
-    @media (max-width:900px){ .seed{grid-column: span 6} }
-    @media (max-width:640px){ .seed{grid-column: span 12} }
-    .seed code{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.82rem}
-
-    .readme pre{white-space: pre-wrap; background: color-mix(in oklab, var(--ink) 6%, transparent); padding:14px; border-radius: 12px; overflow:auto}
-
-    footer{max-width:1100px; margin: 30px auto 80px; padding: 0 18px; color: var(--muted)}
-  </style>
-
-  <!-- Chart.js for quick trends -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" integrity="sha384-1r9T3zYJ1YvGm2u0cS2u6nQ+7xH7bO1f9Q1u7m2X4Qx3l0s7b8tGynv6xjA2o1p9" crossorigin="anonymous"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Launch Model - FourTwenty Analytics</title>
+  <meta name="description" content="The Launch is the machine manifesto">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🚀</text></svg>">
 </head>
 <body>
-  <!-- GTM (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WVC4SNLB" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-
   <header>
-    <div class="wrap row">
-      <a class="back" href="https://zbreeden.github.io/FourTwentyAnalytics/" onclick="signal('back_to_hub_click')">
-        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
-        <span>Back to FourTwenty Analytics</span>
-      </a>
-      <div class="brand">
-        <div class="logo"><span>🚀</span></div>
-        <div class="title">
-          <h1>The Launch — Internal Systems Dashboard</h1>
-          <p>Repeatable, QA‑focused product launches built on seeds & guardrails.</p>
-        </div>
-      </div>
-    </div>
+    <h1>🚀 Launch Model</h1>
+    <p>The Launch is the machine manifesto</p>
+    <nav>
+      <a href="https://zbreeden.github.io/FourTwentyAnalytics/">← Back to Hub</a> |
+      <a href="https://github.com/zbreeden/launch-model">Repository</a> |
+      <a href="https://github.com/zbreeden/FourTwentyAnalytics">Hub Source</a>
+    </nav>
   </header>
-
+  
   <main>
-    <section class="grid">
-      <!-- KPI Deck -->
-      <section class="card" style="grid-column: span 12">
-        <div class="section-title">
-          <h2>Operational KPIs</h2>
-          <div class="controls">
-            <span class="chip">WIP&nbsp;max: <input id="inpWip" type="number" min="1" step="1"/></span>
-            <span class="chip">On‑time&nbsp;target: <input id="inpOnTime" type="number" min="0" max="1" step="0.01"/></span>
-            <button class="chip" onclick="saveThresholds()" title="Persist in localStorage">Save thresholds</button>
-          </div>
-        </div>
-
-        <div class="kpis">
-          <div class="kpi" id="kpiWip">
-            <h3>Work in Progress</h3>
-            <div class="big" data-field="value">—</div>
-            <div class="sub"><span class="badge" data-field="badge">—</span></div>
-            <div class="progress" aria-hidden="true"><div class="bar" data-field="bar"></div></div>
-          </div>
-          <div class="kpi" id="kpiThroughput">
-            <h3>Throughput (units/sprint)</h3>
-            <div class="big" data-field="value">—</div>
-            <div class="sub">Avg <span data-field="avg">—</span> • Last <span data-field="last">—</span></div>
-            <div class="progress" aria-hidden="true"><div class="bar" data-field="bar"></div></div>
-          </div>
-          <div class="kpi" id="kpiLead">
-            <h3>Lead Time (days)</h3>
-            <div class="big" data-field="value">—</div>
-            <div class="sub">Trend last 4 sprints</div>
-            <div class="progress" aria-hidden="true"><div class="bar" data-field="bar"></div></div>
-          </div>
-          <div class="kpi" id="kpiOnTime">
-            <h3>On‑Time Delivery</h3>
-            <div class="big" data-field="value">—</div>
-            <div class="sub"><span class="badge" data-field="badge">—</span></div>
-            <div class="progress" aria-hidden="true"><div class="bar" data-field="bar"></div></div>
-          </div>
-          <div class="kpi" id="kpiDefects">
-            <h3>Defects (escape)</h3>
-            <div class="big" data-field="value">—</div>
-            <div class="sub">Lower is better</div>
-            <div class="progress" aria-hidden="true"><div class="bar" data-field="bar"></div></div>
-          </div>
-          <div class="kpi" id="kpiRepeat">
-            <h3>Repeatability Index</h3>
-            <div class="big" data-field="value">—</div>
-            <div class="sub">1 − σ/μ of throughput</div>
-            <div class="progress" aria-hidden="true"><div class="bar" data-field="bar"></div></div>
-          </div>
-          <div class="kpi" id="kpiHealth">
-            <h3>Process Health Score</h3>
-            <div class="big" data-field="value">—</div>
-            <div class="sub"><span class="badge" data-field="badge">—</span></div>
-            <div class="progress" aria-hidden="true"><div class="bar" data-field="bar"></div></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Trends -->
-      <section class="card" style="grid-column: span 12">
-        <div class="section-title"><h2>Throughput & Lead Time (last sprints)</h2></div>
-        <canvas id="trendChart" aria-label="Throughput and Lead Time trends" role="img"></canvas>
-      </section>
-
-      <!-- QA Guardrails -->
-      <section class="card" style="grid-column: span 7">
-        <div class="section-title"><h2>QA Guardrails (GIGO)</h2></div>
-        <div class="qa-list" id="qaList"></div>
-      </section>
-
-      <!-- Seeds Catalog -->
-      <section class="card" style="grid-column: span 5">
-        <div class="section-title"><h2>Seeds that make launches repeatable</h2></div>
-        <div class="seeds" id="seedList"></div>
-        <p style="margin-top:10px; color:var(--muted)">Keep these files versioned. Schematics drive everything; UIs are generated from specs.</p>
-      </section>
-
-      <!-- README (inline preview) -->
-      <section class="card readme" style="grid-column: span 12">
-        <div class="section-title">
-          <h2>README.md</h2>
-          <div class="controls">
-            <a class="chip" href="./README.md" target="_blank" rel="noopener" onclick="signal('open_readme_on_github')">Open raw</a>
-            <button class="chip" onclick="renderReadme()">Render inline</button>
-          </div>
-        </div>
-        <pre id="readmePre">(Click “Render inline” to load README.md here.)</pre>
-      </section>
+    <section>
+      <h2>🌌 Constellation Info</h2>
+      <ul>
+        <li><strong>Orbit</strong>: core</li>
+        <li><strong>Status</strong>: seed</li>  
+        <li><strong>Module Key</strong>: <code>launch_model</code></li>
+      </ul>
+    </section>
+    
+    <section>
+      <h2>📡 Latest Signal</h2>
+      <div id="signal-container">
+        <p><em>Loading signal data...</em></p>
+      </div>
     </section>
   </main>
-
+  
   <footer>
-    <p>© <span id="year"></span> FourTwenty Analytics • The Launch. Dashboard values below are demo data seeded from this repo’s README. Adjust thresholds above to simulate policy. Manufacturing‑style KPIs shown for repeatability.
-    </p>
+    <p>Part of the <a href="https://zbreeden.github.io/FourTwentyAnalytics/">FourTwenty Analytics</a> constellation</p>
   </footer>
 
   <script>
-    // ————— Data seed ————————————————————————————————————————————————
-    const seed = {
-      meta: { project: "GECU – The Bank", owner: "Zach Breeden", updated: "2025-08-30" },
-      thresholds: { wip_max: 5, on_time_target: 0.85 },
-      deliveryFlow: [
-        { sprint: "S-1", wip: 6, throughput: 5, leadTime: 9, cycleTime: 5, onTime: 0.60, defects: 2 },
-        { sprint: "S-2", wip: 5, throughput: 6, leadTime: 8, cycleTime: 4, onTime: 0.70, defects: 1 },
-        { sprint: "S-3", wip: 5, throughput: 7, leadTime: 7, cycleTime: 4, onTime: 0.82, defects: 1 },
-        { sprint: "S-4", wip: 4, throughput: 7, leadTime: 6, cycleTime: 3, onTime: 0.86, defects: 0 }
-      ],
-      qaRules: [
-        "Input contract first (schema is source of truth)",
-        "Source provenance header on every dataset",
-        "Deterministic validation (fail fast)",
-        "Funnel logic checks",
-        "Anomaly flags (warn, don’t fail)",
-        "Sampling + reality checks",
-        "Append‑only archive with MANIFEST",
-        "Small, loud CI (block on hard fails)",
-        "Human note box for known weirdness",
-        "Feedback loop (promote warn → error when warranted)"
-      ],
-      seeds: [
-        "seeds.registry.yml",
-        "seeds.tags.yml",
-        "seeds.emoji_palette.yml",
-        "seeds.statuses.yml",
-        "seeds.glossary.yml",
-        "seeds.orbits.yml",
-        "seeds.modules.yml",
-        "seeds.seedset.yml",
-        "signals.latest.json",
-      ]
-    };
-
-    // ————— Utilities ————————————————————————————————————————————————
-    const $ = (sel, el=document) => el.querySelector(sel);
-    const $$ = (sel, el=document) => [...el.querySelectorAll(sel)];
-    const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
-
-    function pct(n){ return (n*100).toFixed(0) + "%" }
-
-    function mean(arr){ return arr.reduce((a,b)=>a+b,0)/arr.length }
-    function stdev(arr){ const m = mean(arr); return Math.sqrt(mean(arr.map(x => (x-m)**2))) }
-
-    function statusClass(score){
-      if(score >= .9) return 'ok';
-      if(score >= .7) return 'warn';
-      return 'bad';
-    }
-
-    function setKpi(el, {value, badgeText, score, bar, extra}){
-      $('[data-field="value"]', el).textContent = value;
-      if(badgeText){ const b=$('[data-field="badge"]', el); b.textContent = badgeText; b.className = 'badge ' + statusClass(score ?? 0); }
-      $('[data-field="bar"]', el).style.width = clamp((bar ?? score ?? 0)*100, 0, 100) + '%';
-      if(extra){ Object.entries(extra).forEach(([k,v]) => { const t=$(`[data-field="${k}"]`, el); if(t) t.textContent = v; }); }
-    }
-
-    function saveThresholds(){
-      const wip = Number($('#inpWip').value || seed.thresholds.wip_max);
-      const ot  = Number($('#inpOnTime').value || seed.thresholds.on_time_target);
-      const t   = { wip_max: Math.max(1, Math.round(wip)), on_time_target: clamp(ot, 0, 1) };
-      localStorage.setItem('launch.thresholds', JSON.stringify(t));
-      seed.thresholds = t; // mutate, then re-render
-      signal('thresholds_saved', t);
-      render();
-    }
-
-    function loadThresholds(){
-      const s = localStorage.getItem('launch.thresholds');
-      if(s){ try{ seed.thresholds = JSON.parse(s); }catch{ /* ignore */ } }
-      $('#inpWip').value    = seed.thresholds.wip_max;
-      $('#inpOnTime').value = seed.thresholds.on_time_target;
-    }
-
-    function compute(){
-      const rows = seed.deliveryFlow;
-      const last = rows[rows.length-1];
-      const thr  = seed.thresholds;
-
-      const tp   = rows.map(r=>r.throughput);
-      const tpMean = mean(tp);
-      const tpStd  = stdev(tp);
-      const repeatIdx = clamp(1 - (tpStd/(tpMean||1)), 0, 1);
-
-      // Normalize components into [0,1]
-      const onTimeNorm = clamp(last.onTime / (thr.on_time_target||1), 0, 1);
-      const wipNorm    = clamp(thr.wip_max / Math.max(last.wip, thr.wip_max), 0, 1);
-      const defectsNorm= clamp(1 - (last.defects/5), 0, 1); // assumes 5 defects = 0 score
-      const leadNorm   = clamp(1 - (last.leadTime/10), 0, 1); // 10 days benchmark
-
-      const health = clamp(0.30*onTimeNorm + 0.20*wipNorm + 0.15*defectsNorm + 0.15*leadNorm + 0.20*repeatIdx, 0, 1);
-
-      return { rows, last, thr, tpMean, tpStd, repeatIdx, onTimeNorm, wipNorm, defectsNorm, leadNorm, health };
-    }
-
-    function render(){
-      const c = compute();
-
-      setKpi($('#kpiWip'), {
-        value: c.last.wip,
-        badgeText: c.last.wip <= c.thr.wip_max ? `≤ max (${c.thr.wip_max})` : `over by ${c.last.wip - c.thr.wip_max}`,
-        score: c.wipNorm,
-        bar: c.wipNorm
-      });
-
-      setKpi($('#kpiThroughput'), {
-        value: c.tpMean.toFixed(1),
-        extra: { avg: c.tpMean.toFixed(1), last: String(c.last.throughput) },
-        score: clamp(c.tpMean/8, 0, 1), // 8 units/sprint as a soft target
-        bar: clamp(c.tpMean/8, 0, 1)
-      });
-
-      const leadScore = clamp(1 - (c.last.leadTime/10), 0, 1);
-      setKpi($('#kpiLead'), {
-        value: c.last.leadTime.toFixed(0),
-        score: leadScore,
-        bar: leadScore
-      });
-
-      setKpi($('#kpiOnTime'), {
-        value: pct(c.last.onTime),
-        badgeText: c.last.onTime >= c.thr.on_time_target ? 'On target' : 'Below target',
-        score: c.onTimeNorm,
-        bar: c.onTimeNorm
-      });
-
-      const defScore = clamp(1 - (c.last.defects/5), 0, 1);
-      setKpi($('#kpiDefects'), {
-        value: String(c.last.defects),
-        score: defScore,
-        bar: defScore
-      });
-
-      setKpi($('#kpiRepeat'), {
-        value: pct(c.repeatIdx),
-        score: c.repeatIdx,
-        bar: c.repeatIdx
-      });
-
-      setKpi($('#kpiHealth'), {
-        value: pct(c.health),
-        badgeText: c.health >= .9 ? 'Excellent' : c.health >= .7 ? 'Stable' : 'At Risk',
-        score: c.health,
-        bar: c.health
-      });
-
-      // QA list
-      const list = $('#qaList');
-      list.innerHTML = '';
-      seed.qaRules.forEach((txt, i) => {
-        const ok = (i === 2 && c.health >= .7) || (i === 3 && c.last.onTime >= c.thr.on_time_target); // tiny demo tie‑ins
-        const item = document.createElement('details');
-        item.innerHTML = `
-          <summary><span class="dot" style="background:${ ok ? 'var(--ok)' : 'var(--warn)'}"></span> ${String(i+1).padStart(2,'0')} • ${txt}</summary>
-          <div style="margin:10px 2px 2px; color:var(--muted)">
-            <div>Automation: <strong>${ ok ? 'Passing (demo)' : 'Pending checks'}</strong></div>
-            <div style="margin-top:6px" class="progress" aria-hidden="true"><div class="bar" style="width:${ ok ? '90%' : '50%'}"></div></div>
-          </div>`;
-        list.appendChild(item);
-      });
-
-      // Seeds list
-      const seeds = $('#seedList');
-      seeds.innerHTML = '';
-      seed.seeds.forEach(name => {
-        const el = document.createElement('div');
-        el.className = 'seed';
-        el.innerHTML = `<code>${name}</code><br/><span style="color:var(--muted)">Version‑control this file</span>`;
-        seeds.appendChild(el);
-      });
-
-      drawChart();
-    }
-
-    let chart;
-    function drawChart(){
-      const ctx = document.getElementById('trendChart');
-      const labels = seed.deliveryFlow.map(r=>r.sprint);
-      const through = seed.deliveryFlow.map(r=>r.throughput);
-      const lead = seed.deliveryFlow.map(r=>r.leadTime);
-
-      if(chart){ chart.destroy(); }
-      chart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels,
-          datasets: [
-            { label: 'Throughput', data: through, tension:.25, borderWidth:2, pointRadius:3 },
-            { label: 'Lead Time (days)', data: lead, tension:.25, borderWidth:2, pointRadius:3 }
-          ]
-        },
-        options: {
-          responsive:true,
-          interaction:{ mode:'index', intersect:false },
-          plugins:{ legend:{ position:'top' }, tooltip:{ enabled:true } },
-          scales:{ y:{ beginAtZero:false } }
+    // Load and display latest signal data
+    async function loadSignalData() {
+      try {
+        const response = await fetch('./signals/latest.json');
+        if (!response.ok) {
+          throw new Error('Signal data not available');
         }
-      });
-    }
-
-    async function renderReadme(){
-      try{
-        const res = await fetch('./README.md', { cache:'no-store' });
-        if(!res.ok) throw new Error('README.md not found');
-        const txt = await res.text();
-        // Minimal safe preview — no HTML injection, just show the text.
-        $('#readmePre').textContent = txt;
-        signal('readme_rendered_inline');
-      }catch(err){
-        $('#readmePre').textContent = 'Could not load README.md ('+err.message+'). You can still open it via the button above.';
+        
+        const signal = await response.json();
+        const container = document.getElementById('signal-container');
+        
+        container.innerHTML = `
+          <div style="border: 1px solid #ddd; padding: 1rem; border-radius: 8px; background: #f9f9f9;">
+            <h3>${signal.emoji || '📡'} ${signal.title}</h3>
+            <p><strong>Summary:</strong> ${signal.summary}</p>
+            <p><strong>Broadcast Time:</strong> ${new Date(signal.ts_utc).toLocaleString()}</p>
+            <p><strong>Rating:</strong> <span style="
+              background: ${signal.rating === 'critical' ? '#ff4444' : 
+                         signal.rating === 'high' ? '#ff8800' : 
+                         signal.rating === 'normal' ? '#4CAF50' : '#888'}; 
+              color: white; 
+              padding: 2px 8px; 
+              border-radius: 4px; 
+              font-size: 0.8em;">${signal.rating}</span></p>
+            ${signal.tags && signal.tags.length > 0 ? 
+              `<p><strong>Tags:</strong> ${signal.tags.map(tag => 
+                `<span style="background: #e1e8ed; padding: 2px 6px; border-radius: 12px; font-size: 0.8em; margin-right: 4px;">${tag}</span>`
+              ).join('')}</p>` : ''}
+            ${signal.payload && signal.payload.notes ? 
+              `<details>
+                <summary>📋 Additional Notes</summary>
+                <p style="margin-top: 0.5rem; padding: 0.5rem; background: white; border-radius: 4px;">${signal.payload.notes}</p>
+              </details>` : ''}
+          </div>
+        `;
+      } catch (error) {
+        document.getElementById('signal-container').innerHTML = 
+          '<p style="color: #888;"><em>Signal data not yet available. Generate signals/latest.json to see broadcast information.</em></p>';
       }
     }
-
-    // ————— Simple event signal to dataLayer ————————————————————————
-    function signal(event, params={}){
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({ event, ts: Date.now(), module:'launch_model', ...params });
-    }
-
-    // Init
-    (function init(){
-      loadThresholds();
-      render();
-      document.getElementById('year').textContent = new Date().getFullYear();
-      signal('dashboard_loaded', { project: seed.meta.project, updated: seed.meta.updated });
-    })();
+    
+    // Load signal data when page loads
+    loadSignalData();
   </script>
-
-<section id="workflow-health" class="card">
-  <h2>Workflow Health — Task Sheet</h2>
-
-  <!-- Controls -->
-  <div id="wf-controls" style="display:flex;gap:8px;flex-wrap:wrap;margin:.5rem 0 1rem;">
-    <select id="repoFilter"><option value="">All repos</option></select>
-    <select id="flowFilter"><option value="">All workflows</option></select>
-    <input id="textFilter" type="search" placeholder="Search branch/run/actor…" style="padding:6px 8px;">
-    <label><input type="checkbox" id="failOnly"> only failures</label>
-    <label><input type="checkbox" id="slaOnly"> only SLA breaches</label>
-  </div>
-
-  <div id="wf-summary"></div>
-  <div id="wf-recent"></div>
-
-  <table id="wf-table">
-    <thead>
-      <tr>
-        <th>When (UTC)</th><th>Repo</th><th>Workflow</th><th>Run</th><th>Branch</th>
-        <th>Status</th><th>Conclusion</th><th>Duration (s)</th><th>SLA</th><th>Link</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-</section>
-
-<script>
-// CSV loader (same as before)
-async function fetchCSV(url) {
-  const res = await fetch(url, { cache: 'no-store' });
-  const text = await res.text();
-  const [header, ...rows] = text.trim().split(/\r?\n/);
-  const keys = header.split(',');
-  return rows.map(r => {
-    const vals = r.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/).map(v => v.replace(/^"|"$/g,''));
-    return Object.fromEntries(keys.map((k,i)=>[k, vals[i] ?? '']));
-  });
-}
-function pill(txt) {
-  const ok = txt === 'success';
-  const warn = ['queued','in_progress'].includes(txt);
-  const fail = ['failure','cancelled','timed_out'].includes(txt);
-  const color = ok ? '#10b981' : (fail ? '#ef4444' : (warn ? '#f59e0b' : '#6b7280'));
-  return `<span style="padding:2px 8px;border-radius:999px;background:${color};color:white;font-size:12px;">${txt||'—'}</span>`;
-}
-function emojiSLA(met) { return (met === 'true' || met === true) ? '🟢' : '🔴'; }
-
-(async () => {
-  const all = await fetchCSV('data/ops/workflow_runs.csv');
-
-  // populate filters
-  const repos = [...new Set(all.map(d=>d.repo))].sort();
-  const flows = [...new Set(all.map(d=>d.workflow_name))].sort();
-  const repoSel = document.getElementById('repoFilter');
-  const flowSel = document.getElementById('flowFilter');
-  repos.forEach(r=>repoSel.insertAdjacentHTML('beforeend', `<option>${r}</option>`));
-  flows.forEach(f=>flowSel.insertAdjacentHTML('beforeend', `<option>${f}</option>`));
-
-  const els = {
-    summary: document.getElementById('wf-summary'),
-    recent: document.getElementById('wf-recent'),
-    tbody: document.querySelector('#wf-table tbody'),
-    text: document.getElementById('textFilter'),
-    failOnly: document.getElementById('failOnly'),
-    slaOnly: document.getElementById('slaOnly')
-  };
-
-  function render(rows) {
-    const total = rows.length;
-    const successes = rows.filter(d=>d.conclusion==='success').length;
-    const fails = rows.filter(d=>d.conclusion && d.conclusion!=='success');
-    const successRate = total ? Math.round((successes/total)*100) : 0;
-    const mttr = fails.length
-      ? Math.round(fails.reduce((a,d)=>a + (+d.duration_sec||0),0) / fails.length)
-      : 0;
-
-    els.summary.innerHTML =
-      `<p><strong>Success rate:</strong> ${successRate}% &nbsp; | &nbsp; <strong>MTTR (failed runs):</strong> ${mttr}s &nbsp; | &nbsp; <strong>Total runs:</strong> ${total}</p>`;
-
-    els.tbody.innerHTML = rows
-      .sort((a,b)=> new Date(b.started_at) - new Date(a.started_at))
-      .map(d => `
-        <tr>
-          <td>${(d.started_at||'').replace('T',' ').replace('Z','')}</td>
-          <td>${d.repo||'—'}</td>
-          <td>${d.workflow_name||'—'}</td>
-          <td>${d.run_id||'—'}</td>
-          <td>${d.branch||'—'}</td>
-          <td>${pill(d.status||'—')}</td>
-          <td>${pill(d.conclusion||'—')}</td>
-          <td>${d.duration_sec||'—'}</td>
-          <td>${emojiSLA(d.sla_met)}</td>
-          <td><a href="${d.url||'#'}" target="_blank" rel="noopener">open</a></td>
-        </tr>
-      `).join('');
-
-    // last 24h panel
-    const now = Date.now();
-    const last24 = rows.filter(d => {
-      const t = new Date(d.started_at).getTime();
-      return t && (now - t) <= 24*3600*1000;
-    });
-    const last24Fails = last24.filter(d=>d.conclusion && d.conclusion!=='success');
-    els.recent.innerHTML =
-      `<p><strong>Last 24h:</strong> ${last24.length} runs — ${last24Fails.length} failures.</p>`;
-  }
-
-  function applyFilters() {
-    const repo = repoSel.value;
-    const flow = flowSel.value;
-    const q = els.text.value.trim().toLowerCase();
-    const onlyFail = els.failOnly.checked;
-    const onlySLA = els.slaOnly.checked;
-
-    let rows = all.slice();
-    if (repo) rows = rows.filter(r=>r.repo===repo);
-    if (flow) rows = rows.filter(r=>r.workflow_name===flow);
-    if (q) rows = rows.filter(r =>
-      [r.branch, r.actor, r.run_id, r.commit_sha].join(' ').toLowerCase().includes(q)
-    );
-    if (onlyFail) rows = rows.filter(r => r.conclusion && r.conclusion !== 'success');
-    if (onlySLA) rows = rows.filter(r => String(r.sla_met) !== 'true');
-
-    render(rows);
-  }
-
-  [repoSel, flowSel, els.text, els.failOnly, els.slaOnly].forEach(el =>
-    el.addEventListener('input', applyFilters)
-  );
-
-  // first paint
-  render(all);
-})();
-</script>
-
 </body>
 </html>

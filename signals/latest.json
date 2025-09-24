@@ -1,0 +1,52 @@
+{
+  "id": "20250924T051242Z-launch-model-workflow_analysis",
+  "ts_utc": "2025-09-24T05:12:42Z",
+  "date": "2025-09-24",
+  "module": "Launch Model",
+  "repo": "launch-model",
+  "title": "Workflow Funnel Analysis Complete",
+  "summary": "Constellation workflow intelligence analysis complete - processed 0 signals with funnel categorization and performance diagnostics",
+  "rating": "normal",
+  "origin": {
+    "name": "Launch Model Intelligence",
+    "url": "https://zbreeden.github.io/launch-model/",
+    "emoji": "🚀"
+  },
+  "links": {
+    "readme": "https://github.com/zbreeden/launch-model#readme",
+    "page": "https://zbreeden.github.io/launch-model/",
+    "data": "https://github.com/zbreeden/launch-model/tree/main/data/internal",
+    "diagnostics": "https://github.com/zbreeden/launch-model/blob/main/data/internal/diagnostics-20250924T051242Z.txt"
+  },
+  "payload": {
+    "module_key": "launch_model",
+    "broadcast_key": "workflow_analysis",
+    "analysis_run": "20250924T051242Z",
+    "source_aggregation": "20250924T010343Z.latest.json",
+    "diagnostics": {
+      "total_signals_processed": 0,
+      "funnel_distribution": {},
+      "module_activity": {},
+      "rating_distribution": {},
+      "analysis_duration_seconds": "auto_calculated",
+      "files_generated": {
+        "analysis_csv": "workflow-analysis-20250924T051242Z.csv",
+        "diagnostics_report": "diagnostics-20250924T051242Z.txt"
+      }
+    },
+    "system_health": {
+      "constellation_coverage": "0",
+      "workflow_diversity": "0",
+      "data_quality": "validated",
+      "processing_status": "success"
+    },
+    "tags": [
+      "workflow_analysis",
+      "operational_intelligence",
+      "constellation_health",
+      "performance_metrics"
+    ]
+  },
+  "checksum": "",
+  "version": "1.0.0"
+}

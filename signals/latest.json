@@ -1,0 +1,29 @@
+{
+  "id": "20251022T161238Z-weekly_update",
+  "ts_utc": "2025-10-22T16:12:38Z",
+  "module": "Launch Model",
+  "repo": "launch-model",
+  "title": "Workflow Funnels",
+  "summary": "Taking the heed from constellation signals, The Launch has disseminated a fresh canonical workflow seed to non-seed statused stars.",
+  "rating": "critical",
+  "origin": {
+    "name": "Launch Model",
+    "url": "https://zbreeden.github.io/launch-model/",
+    "emoji": "🚀"
+  },
+  "status": "developing",
+  "links": {
+    "readme": "https://github.com/zbreeden/launch-model#readme",
+    "page": "https://zbreeden.github.io/launch-model/"
+  },
+  "payload": {
+    "orbit": "core",
+      "status": "seed",
+    "module_key": "launch_model",
+    "notes": "USER SKILLS - data architecture, database management, data governance, data quality assurance",
+    "broadcast_key": "weekly_update",
+    "tags": [
+      "harmony"
+    ]
+  }
+}
